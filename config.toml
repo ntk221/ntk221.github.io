@@ -3,3 +3,4 @@ languageCode = 'en-us'
 title = 'My New Hugo Site'
 theme = "hugo-PaperMod"
 publishDir = "docs"
+canonifyurls = true
