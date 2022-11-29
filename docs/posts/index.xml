@@ -1,12 +1,42 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>Posts on My New Hugo Site</title>
+    <title>Posts on knittaのブログ</title>
     <link>https://ntk221.github.io/posts/</link>
-    <description>Recent content in Posts on My New Hugo Site</description>
+    <description>Recent content in Posts on knittaのブログ</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 30 Nov 2022 01:46:44 +0900</lastBuildDate><atom:link href="https://ntk221.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 30 Nov 2022 02:59:10 +0900</lastBuildDate><atom:link href="https://ntk221.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How to build blog</title>
+      <link>https://ntk221.github.io/posts/how_to_build_blog/</link>
+      <pubDate>Wed, 30 Nov 2022 02:59:10 +0900</pubDate>
+      
+      <guid>https://ntk221.github.io/posts/how_to_build_blog/</guid>
+      <description>はじめに 突然ですが，皆さんこういうことを思ったことがないでしょうか。
+「あー，なんか有無を言わさずみんなに褒められて，気分良くなりたいなぁ&amp;hellip;」
+こんなときは，みんなと同じことをやっていてはいけない，ということで私は42Tokyo というところの入学試験(Piscine)を受けて見事合格した。そして，「ねぇみんな聞いてー，僕 42 Tokyo に合格したよ〜〜〜」と言った。すると，人はこう言った。
+「なにそれ〜」
+この様な結果から次の2点の事実が観察できます。一つは
+「42 Tokyo の知名度は低く，その価値は社会から認識されていない」 という点。 もう一つは，
+「みんなと違うことをやったからと言って，それだけで誉められる訳ではない」 という点です。 今回のテーマ 以上の観察から私はこう思いました。
+「42 Tokyo の価値をみんなに知ってもらって，かつ，みんなに褒められた〜い」
+そのためには， 42Tokyo がどの様な場所で，私がどの様な人間であるかを知ってもらうための情報を発信する方法が必要になると思います。また，なんかかっこいいやり方でそれを実現するのがよいのではないでしょうか。カッコいいほうが自慢できるし，誉められそうなので😄
+静的サイトジェネレータ + Github Pages = cool 検索エンジンを駆使して情報を集めていった結果，
+静的サイトジェネレータ
+Github Pages
+というものを使えば，カッコいいサイトを作って，github で公開することができそうだぞ，ということがわかりました。これを使って42Tokyoのことや，私が今やっていることについて，coolに情報を発信することができるのではないかな？
+では，早速やってみましょう！
+&amp;hellip;
+とその前に一応これらの用語について用語を整理しておきます。
+静的サイトジェネレータ &amp;hellip; Markdown などの記法で書かれたテキストファイルから，静的なWebページを生成するソフトウェアである
+Github Pages &amp;hellip; 静的サイトのホスティングサービスであり，これを使って静的サイトジェネレータを使って作った Webサイトを運用することができる。
+実際にやってみる では，実際に静的サイトジェネレータを使って，Webサイトを作ってから，Github Pages にデプロイしてみましょう。今回私が使う静的サイトジェネレータは，Hugoというものです。
+私の環境(M1 Mac)では，Homebrew というパッケージマネージャを使って，Hugo をシステムに導入することができました。
+$&amp;gt; brew install hugo これだけで，Hugo を使って静的サイトを作ることができます。まずは，サイトの雛形を作りましょう。以下のようなコマンドを打って実行するだけでいい。
+$&amp;gt; hugo new site &amp;lt;サイト名&amp;gt; &amp;lt;サイト名&amp;gt;で指定してディレクトリが新しくできるので，このディレクトリに移動して，tree コマンドを打ってみると以下の様な構成になっていることがわかリます。</description>
+    </item>
+    
     <item>
       <title>Actions</title>
       <link>https://ntk221.github.io/posts/actions/</link>

@@ -1,6 +1,6 @@
 baseURL = 'https://ntk221.github.io'
 languageCode = 'en-us'
-title = 'My New Hugo Site'
+title = 'knittaのブログ'
 theme = "hugo-PaperMod"
 publishDir = "docs"
 canonifyurls = true
