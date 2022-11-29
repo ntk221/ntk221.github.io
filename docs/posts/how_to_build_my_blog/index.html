@@ -328,12 +328,12 @@ git submodule add git@github.com:adityatelange/hugo-PaperMod.git
 </code></pre><p>というコマンドを打つと，静的サイトの生成がされます。続いて，</p>
 <pre tabindex="0"><code>$&gt; hugo server
 </code></pre><p>と打つと，localhostの1313番ポートで静的サイトの配信をします。ブラウザで<code>http://localhost:1313/</code>にアクセスしましょう。</p>
-<p><img loading="lazy" src="https://ntk221.github.io/static/imgs/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%202022-11-28%2020.09.12.png" alt=""  />
+<p><img loading="lazy" src="https://ntk221.github.io/imgs/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%202022-11-28%2020.09.12.png" alt=""  />
 </p>
 <p>&ldquo;cool&rdquo; やん?</p>
 <h3 id="github-pages-でデプロイする"><strong>Github Pages でデプロイする</strong><a hidden class="anchor" aria-hidden="true" href="#github-pages-でデプロイする">#</a></h3>
 <p>上の流れで作ったリポジトリを Githubに <code>&lt;account名&gt;.github.io</code>という名前で用意したリポジトリに pushして，Github Pages の設定をすると，生成したコンテンツをホスティングしてくれる。<a href="https://qiita.com/ysdyt/items/a581277dd1312a0e83c3">こちらの記事</a>を参考にして，<code>config.toml</code>や，ディレクトリの名前を変更したりしてから，<code>&lt;account名&gt;.github.io</code>という名前のリポジトリを作成して，そこに push してからGithub Pages の設定を変更してやってから，<code>https://&lt;accout名&gt;.github.io</code>にアクセスすると&hellip;</p>
-<p><img loading="lazy" src="https://ntk221.github.io/static/imgs/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%202022-11-29%2015.43.04.png" alt=""  />
+<p><img loading="lazy" src="https://ntk221.github.io/imgs/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%202022-11-29%2015.43.04.png" alt=""  />
 </p>
 <p>よーし，これで静的サイトのホスティングに成功しました！</p>
 <h3 id="静的サイトジェネレータ--github-pages--github-actions--さらにcool"><strong>静的サイトジェネレータ + Github Pages + Github Actions = さらにcool</strong><a hidden class="anchor" aria-hidden="true" href="#静的サイトジェネレータ--github-pages--github-actions--さらにcool">#</a></h3>
@@ -384,10 +384,10 @@ jobs:
           publish_dir: ./public
 </code></pre><p>Buildのフィールドを<code>hugo -minify</code>から<code>hugo</code>に変えただけです，<code>gh-pages.yml</code>を見ると，<code>on:</code>というフィールドに書いてあるのが，トリガーとなるイベントの登録であるように見えます。<code>jobs</code>に書かれている仕事が，<code>on:</code>に書いてあるイベントが起きたときに自動で実行される，というように見えますね。では，<code>hugo new posts/actions.md</code>で，テスト用のファイルを作って，push しちゃいましょうか。</p>
 <p>そして，Github Pagesの設定から，<code>gh-pages.yml</code>ブランチを選択します。</p>
-<p><img loading="lazy" src="https://ntk221.github.io/static/imgs/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%202022-11-30%202.19.26.png" alt=""  />
+<p><img loading="lazy" src="https://ntk221.github.io/imgs/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%202022-11-30%202.19.26.png" alt=""  />
 </p>
 <p>さて，どうなるかな〜。</p>
-<p><img loading="lazy" src="../../static/imgs/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%202022-11-30%202.20.18.png" alt=""  />
+<p><img loading="lazy" src="https://ntk221.github.io/imgs/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%202022-11-30%202.20.18.png" alt=""  />
 
 もっと，coolになったやん。</p>
 <h3 id="おわりに"><strong>おわりに</strong><a hidden class="anchor" aria-hidden="true" href="#おわりに">#</a></h3>
