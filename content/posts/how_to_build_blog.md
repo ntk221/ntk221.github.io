@@ -1,6 +1,7 @@
 ---
 title: "How to build blog"
 date: 2022-11-30T02:59:10+09:00
+draft: true
 ---
 
 こんにちは!42tokyo Advent Calendar 2022の14日目を担当する, knittaです。よろしくお願いします。
