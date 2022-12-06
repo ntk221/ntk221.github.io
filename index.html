@@ -139,10 +139,10 @@
 #include &lt;stdbool.h&gt; #include &lt;stdio.h&gt; int my_abs(int x); void test(void) { bool result = (my_abs(-100) == 100) // -100の絶対値は100と期待される if (result) puts(&#34;ok&#34;); else puts(&#34;ko&#34;); } int main(void) { test(); } では，このコードが書かれたファイルをtest.cという名前で保存して，コンパイルしてみましょう。結果は以下のようになります。
 あらまぁ，コンパイルできてないみたいですね。なんででしょうか…
 はい，答えは簡単で，my_absという関数がまだないからですね。test.cにmy_absの実装を追加しましょう。こんな感じでしょうかね。
-#include &lt;stdbool.h&gt; #include &lt;stdio.h&gt; int my_abs(int x) { return(-x); } bool result = (my_abs(-100) == 100) // -100の絶対値は100と期待される if (result) puts(&#34;ok&#34;); コンパイルして，実行してみます。
+int my_abs(int x) { return(-x); } コンパイルして，実行してみます。
 わーい，okだ！
 okじゃない しかし，absの典型的な場合とは他にもあります。入力が正の整数の時には，absは，その数をそのまま返さなくてはなりません。この振る舞いについてもテストしましょう。
-#include &lt;stdbool.h&gt; #include &lt;stdio....</p>
+#include &lt;stdbool.h&gt; #include &lt;stdio.h&gt; int my_abs(int x) { return (-x); } void test(void) { bool result = (my_abs(-100) == 100) &amp;&amp; (my_abs(100) == 100); if (result) puts(&#34;ok&#34;); else puts(&#34;ko&#34;); } int main(void) { test(); } 結果は…...</p>
   </div>
   <footer class="entry-footer"><span title='2022-12-06 06:33:04 +0900 +0900'>December 6, 2022</span></footer>
   <a class="entry-link" aria-label="post link to Test first" href="https://ntk221.github.io/posts/test_first/"></a>

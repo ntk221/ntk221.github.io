@@ -15,10 +15,10 @@
 #include &lt;stdbool.h&gt; #include &lt;stdio.h&gt; int my_abs(int x); void test(void) { bool result = (my_abs(-100) == 100) // -100の絶対値は100と期待される if (result) puts(&#34;ok&#34;); else puts(&#34;ko&#34;); } int main(void) { test(); } では，このコードが書かれたファイルをtest.cという名前で保存して，コンパイルしてみましょう。結果は以下のようになります。
 あらまぁ，コンパイルできてないみたいですね。なんででしょうか&hellip;
 はい，答えは簡単で，my_absという関数がまだないからですね。test.cにmy_absの実装を追加しましょう。こんな感じでしょうかね。
-#include &lt;stdbool.h&gt; #include &lt;stdio.h&gt; int my_abs(int x) { return(-x); } bool result = (my_abs(-100) == 100) // -100の絶対値は100と期待される if (result) puts(&#34;ok&#34;); コンパイルして，実行してみます。
+int my_abs(int x) { return(-x); } コンパイルして，実行してみます。
 わーい，okだ！
 okじゃない しかし，absの典型的な場合とは他にもあります。入力が正の整数の時には，absは，その数をそのまま返さなくてはなりません。この振る舞いについてもテストしましょう。
-#include &lt;stdbool.h&gt; #include &lt;stdio.">
+#include &lt;stdbool.h&gt; #include &lt;stdio.h&gt; int my_abs(int x) { return (-x); } void test(void) { bool result = (my_abs(-100) == 100) &amp;&amp; (my_abs(100) == 100); if (result) puts(&#34;ok&#34;); else puts(&#34;ko&#34;); } int main(void) { test(); } 結果は&hellip;">
 <meta name="author" content="">
 <link rel="canonical" href="https://ntk221.github.io/posts/test_first/">
 <link crossorigin="anonymous" href="https://ntk221.github.io/assets/css/stylesheet.bc1149f4a72aa4858d3a9f71462f75e5884ffe8073ea9d6d5761d5663d651e20.css" integrity="sha256-vBFJ9KcqpIWNOp9xRi915YhP/oBz6p1tV2HVZj1lHiA=" rel="preload stylesheet" as="style">
@@ -76,10 +76,10 @@ okじゃない しかし，absの典型的な場合とは他にもあります�
 #include &lt;stdbool.h&gt; #include &lt;stdio.h&gt; int my_abs(int x); void test(void) { bool result = (my_abs(-100) == 100) // -100の絶対値は100と期待される if (result) puts(&#34;ok&#34;); else puts(&#34;ko&#34;); } int main(void) { test(); } では，このコードが書かれたファイルをtest.cという名前で保存して，コンパイルしてみましょう。結果は以下のようになります。
 あらまぁ，コンパイルできてないみたいですね。なんででしょうか&hellip;
 はい，答えは簡単で，my_absという関数がまだないからですね。test.cにmy_absの実装を追加しましょう。こんな感じでしょうかね。
-#include &lt;stdbool.h&gt; #include &lt;stdio.h&gt; int my_abs(int x) { return(-x); } bool result = (my_abs(-100) == 100) // -100の絶対値は100と期待される if (result) puts(&#34;ok&#34;); コンパイルして，実行してみます。
+int my_abs(int x) { return(-x); } コンパイルして，実行してみます。
 わーい，okだ！
 okじゃない しかし，absの典型的な場合とは他にもあります。入力が正の整数の時には，absは，その数をそのまま返さなくてはなりません。この振る舞いについてもテストしましょう。
-#include &lt;stdbool.h&gt; #include &lt;stdio." />
+#include &lt;stdbool.h&gt; #include &lt;stdio.h&gt; int my_abs(int x) { return (-x); } void test(void) { bool result = (my_abs(-100) == 100) &amp;&amp; (my_abs(100) == 100); if (result) puts(&#34;ok&#34;); else puts(&#34;ko&#34;); } int main(void) { test(); } 結果は&hellip;" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://ntk221.github.io/posts/test_first/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2022-12-06T06:33:04+09:00" />
@@ -95,10 +95,10 @@ okじゃない しかし，absの典型的な場合とは他にもあります�
 #include &lt;stdbool.h&gt; #include &lt;stdio.h&gt; int my_abs(int x); void test(void) { bool result = (my_abs(-100) == 100) // -100の絶対値は100と期待される if (result) puts(&#34;ok&#34;); else puts(&#34;ko&#34;); } int main(void) { test(); } では，このコードが書かれたファイルをtest.cという名前で保存して，コンパイルしてみましょう。結果は以下のようになります。
 あらまぁ，コンパイルできてないみたいですね。なんででしょうか&hellip;
 はい，答えは簡単で，my_absという関数がまだないからですね。test.cにmy_absの実装を追加しましょう。こんな感じでしょうかね。
-#include &lt;stdbool.h&gt; #include &lt;stdio.h&gt; int my_abs(int x) { return(-x); } bool result = (my_abs(-100) == 100) // -100の絶対値は100と期待される if (result) puts(&#34;ok&#34;); コンパイルして，実行してみます。
+int my_abs(int x) { return(-x); } コンパイルして，実行してみます。
 わーい，okだ！
 okじゃない しかし，absの典型的な場合とは他にもあります。入力が正の整数の時には，absは，その数をそのまま返さなくてはなりません。この振る舞いについてもテストしましょう。
-#include &lt;stdbool.h&gt; #include &lt;stdio."/>
+#include &lt;stdbool.h&gt; #include &lt;stdio.h&gt; int my_abs(int x) { return (-x); } void test(void) { bool result = (my_abs(-100) == 100) &amp;&amp; (my_abs(100) == 100); if (result) puts(&#34;ok&#34;); else puts(&#34;ko&#34;); } int main(void) { test(); } 結果は&hellip;"/>
 
 
 <script type="application/ld+json">
@@ -127,12 +127,12 @@ okじゃない しかし，absの典型的な場合とは他にもあります�
   "@type": "BlogPosting",
   "headline": "Test first",
   "name": "Test first",
-  "description": "はじめに いろいろあって，かっこいいブログを作ることができたので，早速なんか書いていこうと思います。今回はテストについてです。\nテストファースト ソフトウェア開発において，プログラマはソフトウェアの部品となるデータ構造や関数を一つづつ作っていくという作業をします。この時，関数やデータ構造にはそれぞれ期待される役割を持っています。例えば，int abs(int x)という関数は，絶対値を返すという機能を持っていることを期待されます。このような期待される役割を機能要件と呼ぶこともあります。\n機能要件が定まっていたとしても，それだけでプログラムを書いていくのは難しいことが多いと思います。ソフトウェアの期待される機能を実現するには，それを複数の部品に分割していく必要もあるでしょう。このような作業はソフトウェアの設計に含まれます。\nソフトウェアの設計が終わって，分割された一つの関数を実装するという段階になってもまだどのように実装すればいいかわからないということがあります 。このような場合にはどうしたら良いでしょうか。\n一つの方法として，まずテストを書くということから始めることができます。関数が果たすべき役割がある程度明確になっていれば，その関数が果たす仕事の典型的なケースについては列挙することができるはずだからです。これができないということは，関数の典型的な振る舞いさえも明らかではない，ということであり，もう一度設計の段階に戻って考えることになります。例えば，abs(x)で言うと以下のようなテストを書くことができます。\n#include \u0026lt;stdbool.h\u0026gt; #include \u0026lt;stdio.h\u0026gt; int my_abs(int x); void test(void) { bool result = (my_abs(-100) == 100) // -100の絶対値は100と期待される if (result) puts(\u0026#34;ok\u0026#34;); else puts(\u0026#34;ko\u0026#34;); } int main(void) { test(); } では，このコードが書かれたファイルをtest.cという名前で保存して，コンパイルしてみましょう。結果は以下のようになります。\nあらまぁ，コンパイルできてないみたいですね。なんででしょうか\u0026hellip;\nはい，答えは簡単で，my_absという関数がまだないからですね。test.cにmy_absの実装を追加しましょう。こんな感じでしょうかね。\n#include \u0026lt;stdbool.h\u0026gt; #include \u0026lt;stdio.h\u0026gt; int my_abs(int x) { return(-x); } bool result = (my_abs(-100) == 100) // -100の絶対値は100と期待される if (result) puts(\u0026#34;ok\u0026#34;); コンパイルして，実行してみます。\nわーい，okだ！\nokじゃない しかし，absの典型的な場合とは他にもあります。入力が正の整数の時には，absは，その数をそのまま返さなくてはなりません。この振る舞いについてもテストしましょう。\n#include \u0026lt;stdbool.h\u0026gt; #include \u0026lt;stdio.",
+  "description": "はじめに いろいろあって，かっこいいブログを作ることができたので，早速なんか書いていこうと思います。今回はテストについてです。\nテストファースト ソフトウェア開発において，プログラマはソフトウェアの部品となるデータ構造や関数を一つづつ作っていくという作業をします。この時，関数やデータ構造にはそれぞれ期待される役割を持っています。例えば，int abs(int x)という関数は，絶対値を返すという機能を持っていることを期待されます。このような期待される役割を機能要件と呼ぶこともあります。\n機能要件が定まっていたとしても，それだけでプログラムを書いていくのは難しいことが多いと思います。ソフトウェアの期待される機能を実現するには，それを複数の部品に分割していく必要もあるでしょう。このような作業はソフトウェアの設計に含まれます。\nソフトウェアの設計が終わって，分割された一つの関数を実装するという段階になってもまだどのように実装すればいいかわからないということがあります 。このような場合にはどうしたら良いでしょうか。\n一つの方法として，まずテストを書くということから始めることができます。関数が果たすべき役割がある程度明確になっていれば，その関数が果たす仕事の典型的なケースについては列挙することができるはずだからです。これができないということは，関数の典型的な振る舞いさえも明らかではない，ということであり，もう一度設計の段階に戻って考えることになります。例えば，abs(x)で言うと以下のようなテストを書くことができます。\n#include \u0026lt;stdbool.h\u0026gt; #include \u0026lt;stdio.h\u0026gt; int my_abs(int x); void test(void) { bool result = (my_abs(-100) == 100) // -100の絶対値は100と期待される if (result) puts(\u0026#34;ok\u0026#34;); else puts(\u0026#34;ko\u0026#34;); } int main(void) { test(); } では，このコードが書かれたファイルをtest.cという名前で保存して，コンパイルしてみましょう。結果は以下のようになります。\nあらまぁ，コンパイルできてないみたいですね。なんででしょうか\u0026hellip;\nはい，答えは簡単で，my_absという関数がまだないからですね。test.cにmy_absの実装を追加しましょう。こんな感じでしょうかね。\nint my_abs(int x) { return(-x); } コンパイルして，実行してみます。\nわーい，okだ！\nokじゃない しかし，absの典型的な場合とは他にもあります。入力が正の整数の時には，absは，その数をそのまま返さなくてはなりません。この振る舞いについてもテストしましょう。\n#include \u0026lt;stdbool.h\u0026gt; #include \u0026lt;stdio.h\u0026gt; int my_abs(int x) { return (-x); } void test(void) { bool result = (my_abs(-100) == 100) \u0026amp;\u0026amp; (my_abs(100) == 100); if (result) puts(\u0026#34;ok\u0026#34;); else puts(\u0026#34;ko\u0026#34;); } int main(void) { test(); } 結果は\u0026hellip;",
   "keywords": [
     
   ],
-  "articleBody": "はじめに いろいろあって，かっこいいブログを作ることができたので，早速なんか書いていこうと思います。今回はテストについてです。\nテストファースト ソフトウェア開発において，プログラマはソフトウェアの部品となるデータ構造や関数を一つづつ作っていくという作業をします。この時，関数やデータ構造にはそれぞれ期待される役割を持っています。例えば，int abs(int x)という関数は，絶対値を返すという機能を持っていることを期待されます。このような期待される役割を機能要件と呼ぶこともあります。\n機能要件が定まっていたとしても，それだけでプログラムを書いていくのは難しいことが多いと思います。ソフトウェアの期待される機能を実現するには，それを複数の部品に分割していく必要もあるでしょう。このような作業はソフトウェアの設計に含まれます。\nソフトウェアの設計が終わって，分割された一つの関数を実装するという段階になってもまだどのように実装すればいいかわからないということがあります 。このような場合にはどうしたら良いでしょうか。\n一つの方法として，まずテストを書くということから始めることができます。関数が果たすべき役割がある程度明確になっていれば，その関数が果たす仕事の典型的なケースについては列挙することができるはずだからです。これができないということは，関数の典型的な振る舞いさえも明らかではない，ということであり，もう一度設計の段階に戻って考えることになります。例えば，abs(x)で言うと以下のようなテストを書くことができます。\n#include #include int my_abs(int x); void test(void) { bool result = (my_abs(-100) == 100) // -100の絶対値は100と期待される if (result) puts(\"ok\"); else puts(\"ko\"); } int main(void) { test(); } では，このコードが書かれたファイルをtest.cという名前で保存して，コンパイルしてみましょう。結果は以下のようになります。\nあらまぁ，コンパイルできてないみたいですね。なんででしょうか…\nはい，答えは簡単で，my_absという関数がまだないからですね。test.cにmy_absの実装を追加しましょう。こんな感じでしょうかね。\n#include #include int my_abs(int x) { return(-x); } bool result = (my_abs(-100) == 100) // -100の絶対値は100と期待される if (result) puts(\"ok\"); コンパイルして，実行してみます。\nわーい，okだ！\nokじゃない しかし，absの典型的な場合とは他にもあります。入力が正の整数の時には，absは，その数をそのまま返さなくてはなりません。この振る舞いについてもテストしましょう。\n#include #include int my_abs(int x) { return (-x); } void test(void) { bool result = (my_abs(-100) == 100) \u0026\u0026 (my_abs(100) == 100); if (result) puts(\"ok\"); else puts(\"ko\"); } int main(void) { test(); } 結果は…\nkoでした。\n入力が正の時と負の時で分岐するべきだったんですね。実装を修正しましょう。\nint my_abs(int x) { if (x \u003c 0) return (-x); else return (x); } 行ったっしょ！\nはい，完璧!\n完璧じゃない 典型的な振る舞いはこれでできたように思いますが，これでは完璧とまでは言えません。ここで完璧な関数とは，全ての場合について期待される振る舞いをするような関数です。\nここで，テストするべき入力値は，典型的ではない値です。典型的でない値の典型(?)としては，0値や，最大値，最小値があります。int型の最小値のテストを追加しましょう。\nvoid test(void) { bool result = (my_abs(-100) == 100) \u0026\u0026 (my_abs(100) == 100); bool special = (my_abs(-2147483648) == 2147483648); if (result \u0026\u0026 special) puts(\"ok\"); else puts(\"ko\"); } 結果は以下のようになります。\nkoやね。\n理由は，int型の最小値の絶対値は，int型の最大値よりも1だけ大きいからです。なぜそうなのかということについては…うん，えーと2の補数表現がね…あれなのよ…\n…宿題にさせてください。\nということで，-2147483648の絶対値を返すことはできないことがわかりました。これはつまり，-2147483648は例外的な入力値であるということです。従って，実装で，-2147483648の場合は例外的に扱うことにしましょう。\nint my_abs(int x) { if (-2147483648 == x) return (-1); if (x \u003c 0) return (-x); if (x \u003e 0) return (x); } 通常，この関数は正の値を返すため，my_absが -1を返した場合は，入力が対応していない場合を意味することができます。テストを修正しましょう。\nvoid test(void) { bool result = (my_abs(-100) == 100) \u0026\u0026 (my_abs(100) == 100); bool special = (my_abs(-2147483648) == -1); if (result \u0026\u0026 special) puts(\"ok\"); else puts(\"ko\"); } 結果は…\nokやね😊\nこのように，テストを書いていく中で，関数の機能要件が段々と明確になっていくことがあります。これを，段階的詳細化と言います。\nでは，他の非典型的な値(の典型)についても，テストを追加しましょう。以下のようになります。\n#include ... bool special = (my_abs(INT_MIN) == -1) \u0026\u0026 \\ (my_abs(INT_MAX) == INT_MAX) \u0026\u0026 \\ (my_abs(0) == 0); 結果は…\n完璧やん!\nおわりに はい，ということでテストファーストで関数を作っていくやり方を紹介しました。これからこのやり方を拡張していくことに関するブログ記事も書きたいと思います。また，ソフトウェアの設計に関することも勉強して，ブログ記事としてアウトプットしていきたいなと思います。最後まで読んでいただきありがとうございました！\n参考文献 プログラミングの基礎 ",
-  "wordCount" : "237",
+  "articleBody": "はじめに いろいろあって，かっこいいブログを作ることができたので，早速なんか書いていこうと思います。今回はテストについてです。\nテストファースト ソフトウェア開発において，プログラマはソフトウェアの部品となるデータ構造や関数を一つづつ作っていくという作業をします。この時，関数やデータ構造にはそれぞれ期待される役割を持っています。例えば，int abs(int x)という関数は，絶対値を返すという機能を持っていることを期待されます。このような期待される役割を機能要件と呼ぶこともあります。\n機能要件が定まっていたとしても，それだけでプログラムを書いていくのは難しいことが多いと思います。ソフトウェアの期待される機能を実現するには，それを複数の部品に分割していく必要もあるでしょう。このような作業はソフトウェアの設計に含まれます。\nソフトウェアの設計が終わって，分割された一つの関数を実装するという段階になってもまだどのように実装すればいいかわからないということがあります 。このような場合にはどうしたら良いでしょうか。\n一つの方法として，まずテストを書くということから始めることができます。関数が果たすべき役割がある程度明確になっていれば，その関数が果たす仕事の典型的なケースについては列挙することができるはずだからです。これができないということは，関数の典型的な振る舞いさえも明らかではない，ということであり，もう一度設計の段階に戻って考えることになります。例えば，abs(x)で言うと以下のようなテストを書くことができます。\n#include #include int my_abs(int x); void test(void) { bool result = (my_abs(-100) == 100) // -100の絶対値は100と期待される if (result) puts(\"ok\"); else puts(\"ko\"); } int main(void) { test(); } では，このコードが書かれたファイルをtest.cという名前で保存して，コンパイルしてみましょう。結果は以下のようになります。\nあらまぁ，コンパイルできてないみたいですね。なんででしょうか…\nはい，答えは簡単で，my_absという関数がまだないからですね。test.cにmy_absの実装を追加しましょう。こんな感じでしょうかね。\nint my_abs(int x) { return(-x); } コンパイルして，実行してみます。\nわーい，okだ！\nokじゃない しかし，absの典型的な場合とは他にもあります。入力が正の整数の時には，absは，その数をそのまま返さなくてはなりません。この振る舞いについてもテストしましょう。\n#include #include int my_abs(int x) { return (-x); } void test(void) { bool result = (my_abs(-100) == 100) \u0026\u0026 (my_abs(100) == 100); if (result) puts(\"ok\"); else puts(\"ko\"); } int main(void) { test(); } 結果は…\nkoでした。\n入力が正の時と負の時で分岐するべきだったんですね。実装を修正しましょう。\nint my_abs(int x) { if (x \u003c 0) return (-x); else return (x); } 行ったっしょ！\nはい，完璧!\n完璧じゃない 典型的な振る舞いはこれでできたように思いますが，これでは完璧とまでは言えません。ここで完璧な関数とは，全ての場合について期待される振る舞いをするような関数です。\nここで，テストするべき入力値は，典型的ではない値です。典型的でない値の典型(?)としては，0値や，最大値，最小値があります。int型の最小値のテストを追加しましょう。\nvoid test(void) { bool result = (my_abs(-100) == 100) \u0026\u0026 (my_abs(100) == 100); bool special = (my_abs(-2147483648) == 2147483648); if (result \u0026\u0026 special) puts(\"ok\"); else puts(\"ko\"); } 結果は以下のようになります。\nkoやね。\n理由は，int型の最小値の絶対値は，int型の最大値よりも1だけ大きいからです。なぜそうなのかということについては…うん，えーと2の補数表現がね…あれなのよ…\n…宿題にさせてください。\nということで，-2147483648の絶対値を返すことはできないことがわかりました。これはつまり，-2147483648は例外的な入力値であるということです。従って，実装で，-2147483648の場合は例外的に扱うことにしましょう。\nint my_abs(int x) { if (-2147483648 == x) return (-1); if (x \u003c 0) return (-x); if (x \u003e 0) return (x); } 通常，この関数は正の値を返すため，my_absが -1を返した場合は，入力が対応していない場合を意味することができます。テストを修正しましょう。\nvoid test(void) { bool result = (my_abs(-100) == 100) \u0026\u0026 (my_abs(100) == 100); bool special = (my_abs(-2147483648) == -1); if (result \u0026\u0026 special) puts(\"ok\"); else puts(\"ko\"); } 結果は…\nokやね😊\nこのように，テストを書いていく中で，関数の機能要件が段々と明確になっていくことがあります。これを，段階的詳細化と言います。\nでは，他の非典型的な値(の典型)についても，テストを追加しましょう。以下のようになります。\n#include ... bool special = (my_abs(INT_MIN) == -1) \u0026\u0026 \\ (my_abs(INT_MAX) == INT_MAX) \u0026\u0026 \\ (my_abs(0) == 0); 結果は…\n完璧やん!\nおわりに はい，ということでテストファーストで関数を作っていくやり方を紹介しました。これからこのやり方を拡張していくことに関するブログ記事も書きたいと思います。また，ソフトウェアの設計に関することも勉強して，ブログ記事としてアウトプットしていきたいなと思います。最後まで読んでいただきありがとうございました！\n参考文献 プログラミングの基礎 ",
+  "wordCount" : "222",
   "inLanguage": "en",
   "datePublished": "2022-12-06T06:33:04+09:00",
   "dateModified": "2022-12-06T06:33:04+09:00",
@@ -241,17 +241,10 @@ int main(void)
 </p>
 <p>あらまぁ，コンパイルできてないみたいですね。なんででしょうか&hellip;</p>
 <p>はい，答えは簡単で，<code>my_abs</code>という関数がまだないからですね。<code>test.c</code>に<code>my_abs</code>の実装を追加しましょう。こんな感じでしょうかね。</p>
-<pre tabindex="0"><code>#include &lt;stdbool.h&gt;
-#include &lt;stdio.h&gt;
-
-int my_abs(int x)
+<pre tabindex="0"><code>int my_abs(int x)
 {
     return(-x);
 }
-
-bool result = (my_abs(-100) == 100) // -100の絶対値は100と期待される
-if (result)
-    puts(&#34;ok&#34;);
 </code></pre><p>コンパイルして，実行してみます。</p>
 <p><img loading="lazy" src="https://ntk221.github.io/images/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%202022-12-06%205.43.20.png" alt=""  />
 </p>

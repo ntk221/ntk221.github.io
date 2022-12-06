@@ -21,10 +21,10 @@
 #include &amp;lt;stdbool.h&amp;gt; #include &amp;lt;stdio.h&amp;gt; int my_abs(int x); void test(void) { bool result = (my_abs(-100) == 100) // -100の絶対値は100と期待される if (result) puts(&amp;#34;ok&amp;#34;); else puts(&amp;#34;ko&amp;#34;); } int main(void) { test(); } では，このコードが書かれたファイルをtest.cという名前で保存して，コンパイルしてみましょう。結果は以下のようになります。
 あらまぁ，コンパイルできてないみたいですね。なんででしょうか&amp;hellip;
 はい，答えは簡単で，my_absという関数がまだないからですね。test.cにmy_absの実装を追加しましょう。こんな感じでしょうかね。
-#include &amp;lt;stdbool.h&amp;gt; #include &amp;lt;stdio.h&amp;gt; int my_abs(int x) { return(-x); } bool result = (my_abs(-100) == 100) // -100の絶対値は100と期待される if (result) puts(&amp;#34;ok&amp;#34;); コンパイルして，実行してみます。
+int my_abs(int x) { return(-x); } コンパイルして，実行してみます。
 わーい，okだ！
 okじゃない しかし，absの典型的な場合とは他にもあります。入力が正の整数の時には，absは，その数をそのまま返さなくてはなりません。この振る舞いについてもテストしましょう。
-#include &amp;lt;stdbool.h&amp;gt; #include &amp;lt;stdio.</description>
+#include &amp;lt;stdbool.h&amp;gt; #include &amp;lt;stdio.h&amp;gt; int my_abs(int x) { return (-x); } void test(void) { bool result = (my_abs(-100) == 100) &amp;amp;&amp;amp; (my_abs(100) == 100); if (result) puts(&amp;#34;ok&amp;#34;); else puts(&amp;#34;ko&amp;#34;); } int main(void) { test(); } 結果は&amp;hellip;</description>
     </item>
     
   </channel>
