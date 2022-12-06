@@ -142,13 +142,13 @@
 機能要件が定まっていたとしても，それだけでプログラムを書いていくのは難しいことが多いと思います。ソフトウェアの期待される機能を実現するには，それを複数の部品に分割していく必要もあるでしょう。このような作業はソフトウェアの設計に含まれます。
 ソフトウェアの設計が終わって，分割された一つの関数を実装するという段階になってもまだどのように実装すればいいかわからないということがあります 。このような場合にはどうしたら良いでしょうか。
 一つの方法として，まずテストを書くということから始めることができます。関数が果たすべき役割がある程度明確になっていれば，その関数が果たす仕事の典型的なケースについては列挙することができるはずだからです。これができないということは，関数の典型的な振る舞いさえも明らかではない，ということであり，もう一度設計の段階に戻って考えることになります。例えば，abs(x)で言うと以下のようなテストを書くことができます。
-#include &lt;stdbool.h&gt; #include &lt;stdio.h&gt; int my_abs(int x); bool result = (my_abs(-100) == 100) // -100の絶対値は100と期待される if (result) puts(&#34;ok&#34;); else puts(&#34;ko&#34;); では，このコードが書かれたファイルをtest.cという名前で保存して，コンパイルしてみましょう。結果は以下のようになります。
+#include &lt;stdbool.h&gt; #include &lt;stdio.h&gt; int my_abs(int x); void test(void) { bool result = (my_abs(-100) == 100) // -100の絶対値は100と期待される if (result) puts(&#34;ok&#34;); else puts(&#34;ko&#34;); } int main(void) { test(); } では，このコードが書かれたファイルをtest.cという名前で保存して，コンパイルしてみましょう。結果は以下のようになります。
 あらまぁ，コンパイルできてないみたいですね。なんででしょうか…
 はい，答えは簡単で，my_absという関数がまだないからですね。test.cにmy_absの実装を追加しましょう。こんな感じでしょうかね。
 #include &lt;stdbool.h&gt; #include &lt;stdio.h&gt; int my_abs(int x) { return(-x); } bool result = (my_abs(-100) == 100) // -100の絶対値は100と期待される if (result) puts(&#34;ok&#34;); コンパイルして，実行してみます。
 わーい，okだ！
 okじゃない しかし，absの典型的な場合とは他にもあります。入力が正の整数の時には，absは，その数をそのまま返さなくてはなりません。この振る舞いについてもテストしましょう。
-#include &lt;stdbool.h&gt; #include &lt;stdio.h&gt; int my_abs(int x) { return (-x); } void test(void) { bool result = (my_abs(-100) == 100) &amp;&amp; (my_abs(100) == 100); if (result) puts(&#34;ok&#34;); else puts(&#34;ko&#34;); } int main(void) { test(); } 結果は…...</p>
+#include &lt;stdbool.h&gt; #include &lt;stdio....</p>
   </div>
   <footer class="entry-footer"><span title='2022-12-06 06:33:04 +0900 +0900'>December 6, 2022</span></footer>
   <a class="entry-link" aria-label="post link to Test first" href="https://ntk221.github.io/posts/test_first/"></a>
