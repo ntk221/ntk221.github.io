@@ -24,11 +24,20 @@ date: 2022-12-06T06:33:04+09:00
 
 int my_abs(int x);
 
-bool result = (my_abs(-100) == 100) // -100の絶対値は100と期待される
-if (result)
-    puts("ok");
-else
-    puts("ko");
+void test(void)
+{
+	bool result = (my_abs(-100) == 100) // -100の絶対値は100と期待される
+
+	if (result)
+    		puts("ok");
+	else
+    		puts("ko");
+}
+
+int main(void)
+{
+	test();
+}
 ```
 
 では，このコードが書かれたファイルを`test.c`という名前で保存して，コンパイルしてみましょう。結果は以下のようになります。
@@ -180,6 +189,8 @@ void test(void)
 
 okやね😊
 
+このように，テストを書いていく中で，関数の機能要件が段々と明確になっていくことがあります。これを，**段階的詳細化**と言います。
+
 では，他の非典型的な値(の典型)についても，テストを追加しましょう。以下のようになります。
 
 ```
@@ -187,7 +198,7 @@ okやね😊
 
 ...
 
-bool special = (my_abs(INT_MIN) == -1) \
+bool special = (my_abs(INT_MIN) == -1) && \
                         (my_abs(INT_MAX) == INT_MAX) && \
                         (my_abs(0) == 0);
 
