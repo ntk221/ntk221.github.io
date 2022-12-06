@@ -49,17 +49,10 @@ int main(void)
 はい，答えは簡単で，`my_abs`という関数がまだないからですね。`test.c`に`my_abs`の実装を追加しましょう。こんな感じでしょうかね。
 
 ```
-#include <stdbool.h>
-#include <stdio.h>
-
 int my_abs(int x)
 {
     return(-x);
 }
-
-bool result = (my_abs(-100) == 100) // -100の絶対値は100と期待される
-if (result)
-    puts("ok");
 ```
 
 コンパイルして，実行してみます。
