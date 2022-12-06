@@ -155,7 +155,7 @@ int my_abs(int x)
                 return (-1);
         if (x < 0)
                 return (-x);
-        if (x > 0)
+        else
                 return (x);
 }
 
