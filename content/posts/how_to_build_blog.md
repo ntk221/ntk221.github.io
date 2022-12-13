@@ -232,6 +232,9 @@ jobs:
 ---
 ということで，これでカッコいいサイトができたので，今後はこのサイトを使って42Tokyoのことや，私が勉強したことなんかを載せていこうと思います。今回自分で色々と調べて，一人でサイトを公開することができて，さらに Github Actionsに触れることができて良かったです。まだまだわからないことが多いので，今後も学んでいくことができたらいいな，と思います😊
 
+明日は，@Akky_Orzさんが,記事を書いてくれるようなのでそちらもぜひ読んでくださいね！最後まで読んでいただきありがとうございました！
+
+
 ### **参考リンク**
 - [Hugo + GitHub Pages + GitHub Actions で独自ドメインのウェブサイトを構築する.](https://zenn.dev/nikaera/articles/hugo-github-actions-for-github-pages#hugo-%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B)
 - [peaceiris/actions-hugo](https://github.com/peaceiris/actions-hugo)
