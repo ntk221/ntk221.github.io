@@ -1,7 +1,6 @@
 ---
-title: "How to build blog"
+title: "How to build your blog"
 date: 2022-11-30T02:59:10+09:00
-draft: true
 ---
 
 こんにちは!42tokyo Advent Calendar 2022の14日目を担当する, knittaです。よろしくお願いします。
@@ -154,11 +153,11 @@ $> hugo server
 ![](/images/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%202022-11-28%2020.09.12.png)
 
 
-"cool" やん?
+cool やん?
 
 ### **Github Pages でデプロイする**
 
-上の流れで作ったリポジトリを Githubに `<account名>.github.io`という名前で用意したリポジトリに pushして，Github Pages の設定をすると，生成したコンテンツをホスティングしてくれ[こちらの記事](https://qiita.com/ysdyt/items/a581277dd1312a0e83c3)を参考にして，`config.toml`や，ディレクトリの名前を変更したりしてから，`<account名>.github.io`という名前のリポジトリを作成して，そこに push してからGithub Pages の設定を変更してやってから，`https://<accout名>.github.io`にアクセスすると...
+上の流れで作ったリポジトリを Githubに `<account名>.github.io`という名前で用意したリポジトリに pushして，Github Pages の設定をすると，生成したコンテンツをホスティングしてくれます。[こちらの記事](https://qiita.com/ysdyt/items/a581277dd1312a0e83c3)を参考にして，`config.toml`や，ディレクトリの名前を変更したりしてから，`<account名>.github.io`という名前のリポジトリを作成して，そこに push してからGithub Pages の設定を変更してやってから，`https://<accout名>.github.io`にアクセスすると...
 
 ![](/images/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%202022-11-29%2015.43.04.png)
 
@@ -220,7 +219,7 @@ jobs:
 
 `gh-pages.yml`の中身を見ると，`on:`というフィールドに書いてあるのが，トリガーとなるイベントの登録であるように見えます。`jobs`に書かれている仕事が，`on:`に書いてあるイベントが起きたときに自動で実行される，というように見えますね。では，`hugo new posts/actions.md`で，テスト用のファイルを作って，push しちゃいましょうか。
 
-そして，Github Pagesの設定から，`gh-pages.yml`ブランチを選択します。
+そして，Github Pagesの設定から，`gh-pages`ブランチを選択します。
 
 ![](/images/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%202022-11-30%202.19.26.png)
 
