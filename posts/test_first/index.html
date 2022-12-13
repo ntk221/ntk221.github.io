@@ -237,8 +237,10 @@ int main(void)
 	test();
 }
 </code></pre><p>では，このコードが書かれたファイルを<code>test.c</code>という名前で保存して，コンパイルしてみましょう。結果は以下のようになります。</p>
-<p><img loading="lazy" src="https://ntk221.github.io/images/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%202022-12-06%205.39.14.png" alt=""  />
-</p>
+<figure class="center">
+    <img loading="lazy" src="https://ntk221.github.io/images/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%202022-12-06%205.39.14.png"/> 
+</figure>
+
 <p>あらまぁ，コンパイルできてないみたいですね。なんででしょうか&hellip;</p>
 <p>はい，答えは簡単で，<code>my_abs</code>という関数がまだないからですね。<code>test.c</code>に<code>my_abs</code>の実装を追加しましょう。こんな感じでしょうかね。</p>
 <pre tabindex="0"><code>int my_abs(int x)
