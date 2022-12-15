@@ -1,5 +1,5 @@
 ---
-title: "Separate of concerns"
+title: "Separation of concerns"
 date: 2022-12-15T11:51:01+09:00
 ---
 
