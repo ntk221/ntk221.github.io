@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Separate of concerns | knittaのブログ</title>
+<meta name="keywords" content="">
+<meta name="description" content="はじめに 前回の記事では，テストファーストのやり方で関数を開発するということをしました。結果として以下のようなコードが出来上がりました。
+#include &lt;stdbool.h&gt; #include &lt;stdio.h&gt; #include &lt;limits.h&gt; int my_abs(int x) { if (INT_MIN) return (-1); if (x &lt; 0) return (-x); else return (x); } void test(void) { bool result = (my_abs(-100) == 100) &amp;&amp; (my_abs(100) == 100); bool special = (my_abs(INT_MIN) == -1) &amp;&amp; \ (my_abs(INT_MAX) == INT_MAX) &amp;&amp; \ (my_abs(0) == 0); if (result) puts(&#34;ok&#34;); else puts(&#34;ko&#34;); } int main(void) { test(); } しかし,前回のコードにはちょっとした問題の芽が潜んでいます。それは，テストの対象となるコードと，テスト用のコードが同一のファイルに含まれているという点です。今のやり方でコードを管理していると，テスト対象となるコードが，テスト用のコードを呼び出すといった意図しない呼び出し関係が生じてしまうかもしれません。
+関心ごとの分離 前回の記事に書いたように，ソフトウェアはそれぞれが固有の働きをする複数のパーツからなると考えることができます。この時非常に重要なのは，各パーツは一つの仕事を担当するように設計する，ということです。各パーツの仕事を明確にして管理しなければ，先ほど確認したようなコード間での意図しない結合が起きてしまったり,どのファイルにどの関数が含まれるのかわからなくなってしまうからです。このような設計指針で設計されたソフトウェアのパーツを単一責務であると言います。ところで，ソフトウェアのパーツのことは一般にモジュールと呼ばれるので，今後は我々もモジュールという言葉を使うことにしましょう。
+テストと開発コードはそれぞれ異なる仕事をする関数です。従って，これらのコードを含むモジュールが単一責務を満たすようにするためには，これらは異なるモジュールに分離する必要があります。このように単一責務を満たすために，モジュールを管理しやすい単位に分割することを関心ごとの分離，と言います。今回はmy_abs()と，test()を違うファイルに分割すれば良いことになります。それぞれ，my_abs.c,test.cというファイルを作って分離しましょう。">
+<meta name="author" content="">
+<link rel="canonical" href="https://ntk221.github.io/posts/separate_of_concerns/">
+<link crossorigin="anonymous" href="https://ntk221.github.io/assets/css/stylesheet.bc1149f4a72aa4858d3a9f71462f75e5884ffe8073ea9d6d5761d5663d651e20.css" integrity="sha256-vBFJ9KcqpIWNOp9xRi915YhP/oBz6p1tV2HVZj1lHiA=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="https://ntk221.github.io/assets/js/highlight.f413e19d0714851f6474e7ee9632408e58ac146fbdbe62747134bea2fa3415e0.js" integrity="sha256-9BPhnQcUhR9kdOfuljJAjlisFG&#43;9vmJ0cTS&#43;ovo0FeA="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://ntk221.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://ntk221.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://ntk221.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://ntk221.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://ntk221.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Separate of concerns" />
+<meta property="og:description" content="はじめに 前回の記事では，テストファーストのやり方で関数を開発するということをしました。結果として以下のようなコードが出来上がりました。
+#include &lt;stdbool.h&gt; #include &lt;stdio.h&gt; #include &lt;limits.h&gt; int my_abs(int x) { if (INT_MIN) return (-1); if (x &lt; 0) return (-x); else return (x); } void test(void) { bool result = (my_abs(-100) == 100) &amp;&amp; (my_abs(100) == 100); bool special = (my_abs(INT_MIN) == -1) &amp;&amp; \ (my_abs(INT_MAX) == INT_MAX) &amp;&amp; \ (my_abs(0) == 0); if (result) puts(&#34;ok&#34;); else puts(&#34;ko&#34;); } int main(void) { test(); } しかし,前回のコードにはちょっとした問題の芽が潜んでいます。それは，テストの対象となるコードと，テスト用のコードが同一のファイルに含まれているという点です。今のやり方でコードを管理していると，テスト対象となるコードが，テスト用のコードを呼び出すといった意図しない呼び出し関係が生じてしまうかもしれません。
+関心ごとの分離 前回の記事に書いたように，ソフトウェアはそれぞれが固有の働きをする複数のパーツからなると考えることができます。この時非常に重要なのは，各パーツは一つの仕事を担当するように設計する，ということです。各パーツの仕事を明確にして管理しなければ，先ほど確認したようなコード間での意図しない結合が起きてしまったり,どのファイルにどの関数が含まれるのかわからなくなってしまうからです。このような設計指針で設計されたソフトウェアのパーツを単一責務であると言います。ところで，ソフトウェアのパーツのことは一般にモジュールと呼ばれるので，今後は我々もモジュールという言葉を使うことにしましょう。
+テストと開発コードはそれぞれ異なる仕事をする関数です。従って，これらのコードを含むモジュールが単一責務を満たすようにするためには，これらは異なるモジュールに分離する必要があります。このように単一責務を満たすために，モジュールを管理しやすい単位に分割することを関心ごとの分離，と言います。今回はmy_abs()と，test()を違うファイルに分割すれば良いことになります。それぞれ，my_abs.c,test.cというファイルを作って分離しましょう。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ntk221.github.io/posts/separate_of_concerns/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-12-15T11:51:01+09:00" />
+<meta property="article:modified_time" content="2022-12-15T11:51:01+09:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Separate of concerns"/>
+<meta name="twitter:description" content="はじめに 前回の記事では，テストファーストのやり方で関数を開発するということをしました。結果として以下のようなコードが出来上がりました。
+#include &lt;stdbool.h&gt; #include &lt;stdio.h&gt; #include &lt;limits.h&gt; int my_abs(int x) { if (INT_MIN) return (-1); if (x &lt; 0) return (-x); else return (x); } void test(void) { bool result = (my_abs(-100) == 100) &amp;&amp; (my_abs(100) == 100); bool special = (my_abs(INT_MIN) == -1) &amp;&amp; \ (my_abs(INT_MAX) == INT_MAX) &amp;&amp; \ (my_abs(0) == 0); if (result) puts(&#34;ok&#34;); else puts(&#34;ko&#34;); } int main(void) { test(); } しかし,前回のコードにはちょっとした問題の芽が潜んでいます。それは，テストの対象となるコードと，テスト用のコードが同一のファイルに含まれているという点です。今のやり方でコードを管理していると，テスト対象となるコードが，テスト用のコードを呼び出すといった意図しない呼び出し関係が生じてしまうかもしれません。
+関心ごとの分離 前回の記事に書いたように，ソフトウェアはそれぞれが固有の働きをする複数のパーツからなると考えることができます。この時非常に重要なのは，各パーツは一つの仕事を担当するように設計する，ということです。各パーツの仕事を明確にして管理しなければ，先ほど確認したようなコード間での意図しない結合が起きてしまったり,どのファイルにどの関数が含まれるのかわからなくなってしまうからです。このような設計指針で設計されたソフトウェアのパーツを単一責務であると言います。ところで，ソフトウェアのパーツのことは一般にモジュールと呼ばれるので，今後は我々もモジュールという言葉を使うことにしましょう。
+テストと開発コードはそれぞれ異なる仕事をする関数です。従って，これらのコードを含むモジュールが単一責務を満たすようにするためには，これらは異なるモジュールに分離する必要があります。このように単一責務を満たすために，モジュールを管理しやすい単位に分割することを関心ごとの分離，と言います。今回はmy_abs()と，test()を違うファイルに分割すれば良いことになります。それぞれ，my_abs.c,test.cというファイルを作って分離しましょう。"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Posts",
+      "item": "https://ntk221.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "Separate of concerns",
+      "item": "https://ntk221.github.io/posts/separate_of_concerns/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Separate of concerns",
+  "name": "Separate of concerns",
+  "description": "はじめに 前回の記事では，テストファーストのやり方で関数を開発するということをしました。結果として以下のようなコードが出来上がりました。\n#include \u0026lt;stdbool.h\u0026gt; #include \u0026lt;stdio.h\u0026gt; #include \u0026lt;limits.h\u0026gt; int my_abs(int x) { if (INT_MIN) return (-1); if (x \u0026lt; 0) return (-x); else return (x); } void test(void) { bool result = (my_abs(-100) == 100) \u0026amp;\u0026amp; (my_abs(100) == 100); bool special = (my_abs(INT_MIN) == -1) \u0026amp;\u0026amp; \\ (my_abs(INT_MAX) == INT_MAX) \u0026amp;\u0026amp; \\ (my_abs(0) == 0); if (result) puts(\u0026#34;ok\u0026#34;); else puts(\u0026#34;ko\u0026#34;); } int main(void) { test(); } しかし,前回のコードにはちょっとした問題の芽が潜んでいます。それは，テストの対象となるコードと，テスト用のコードが同一のファイルに含まれているという点です。今のやり方でコードを管理していると，テスト対象となるコードが，テスト用のコードを呼び出すといった意図しない呼び出し関係が生じてしまうかもしれません。\n関心ごとの分離 前回の記事に書いたように，ソフトウェアはそれぞれが固有の働きをする複数のパーツからなると考えることができます。この時非常に重要なのは，各パーツは一つの仕事を担当するように設計する，ということです。各パーツの仕事を明確にして管理しなければ，先ほど確認したようなコード間での意図しない結合が起きてしまったり,どのファイルにどの関数が含まれるのかわからなくなってしまうからです。このような設計指針で設計されたソフトウェアのパーツを単一責務であると言います。ところで，ソフトウェアのパーツのことは一般にモジュールと呼ばれるので，今後は我々もモジュールという言葉を使うことにしましょう。\nテストと開発コードはそれぞれ異なる仕事をする関数です。従って，これらのコードを含むモジュールが単一責務を満たすようにするためには，これらは異なるモジュールに分離する必要があります。このように単一責務を満たすために，モジュールを管理しやすい単位に分割することを関心ごとの分離，と言います。今回はmy_abs()と，test()を違うファイルに分割すれば良いことになります。それぞれ，my_abs.c,test.cというファイルを作って分離しましょう。",
+  "keywords": [
+    
+  ],
+  "articleBody": "はじめに 前回の記事では，テストファーストのやり方で関数を開発するということをしました。結果として以下のようなコードが出来上がりました。\n#include #include #include int my_abs(int x) { if (INT_MIN) return (-1); if (x \u003c 0) return (-x); else return (x); } void test(void) { bool result = (my_abs(-100) == 100) \u0026\u0026 (my_abs(100) == 100); bool special = (my_abs(INT_MIN) == -1) \u0026\u0026 \\ (my_abs(INT_MAX) == INT_MAX) \u0026\u0026 \\ (my_abs(0) == 0); if (result) puts(\"ok\"); else puts(\"ko\"); } int main(void) { test(); } しかし,前回のコードにはちょっとした問題の芽が潜んでいます。それは，テストの対象となるコードと，テスト用のコードが同一のファイルに含まれているという点です。今のやり方でコードを管理していると，テスト対象となるコードが，テスト用のコードを呼び出すといった意図しない呼び出し関係が生じてしまうかもしれません。\n関心ごとの分離 前回の記事に書いたように，ソフトウェアはそれぞれが固有の働きをする複数のパーツからなると考えることができます。この時非常に重要なのは，各パーツは一つの仕事を担当するように設計する，ということです。各パーツの仕事を明確にして管理しなければ，先ほど確認したようなコード間での意図しない結合が起きてしまったり,どのファイルにどの関数が含まれるのかわからなくなってしまうからです。このような設計指針で設計されたソフトウェアのパーツを単一責務であると言います。ところで，ソフトウェアのパーツのことは一般にモジュールと呼ばれるので，今後は我々もモジュールという言葉を使うことにしましょう。\nテストと開発コードはそれぞれ異なる仕事をする関数です。従って，これらのコードを含むモジュールが単一責務を満たすようにするためには，これらは異なるモジュールに分離する必要があります。このように単一責務を満たすために，モジュールを管理しやすい単位に分割することを関心ごとの分離，と言います。今回はmy_abs()と，test()を違うファイルに分割すれば良いことになります。それぞれ，my_abs.c,test.cというファイルを作って分離しましょう。\n./my_abs.c\nint my_abs(int num) { ... } ./test.c\nvoid test(void) { ... } int main(void) { test(); return (0); } 依存性の注入 このままでは，test.cは単独でコンパイルすることができません。なぜなら,test()関数は,my_abs()を呼び出しているという点でmy_abs()関数に依存しているからです。このことをファイルの中で表現し，ファイル単独でコンパイルできるようにするには，my_abs()の プロトタイプ宣言を含むヘッダーファイルを用意して，それをファイルの先頭でインクルードすれば良いです。以下のようになります。\n./include/my_abs.h\n#ifndef MY_ABS_H #define MY_ABS_H int my_abs(int num); #endif test.c\n#include \"include/abs.h\" ... これで，テストコードの開発コードに対する依存性を表現することができました。\nMakefile C言語では，Makefileというビルドツールを使うことで，ビルド過程を簡略化することができます。以下のように超簡単なMakefileを用意しましょう。\n./Makefile\ntest: gcc *.c -o test ./test rm test これで，test用のコマンドを作ることができました。make testとコマンドを打ってみましょう。\nすごくいい感じですね！\n最後に，test.cと,my_abs.cが異なるモジュールに属することを明示するために，フォルダ構成を整えましょう。\n$\u003e tree . ├── Makefile ├── include │ └── my_abs.h ├── srcs │ └── my_abs.c └── tests └── test.c これに合わせて，Makefileも多少変更しましょう。\nSRCS\t=\t./srcs/*.c TESTS\t=\t./tests/*.c CC\t=\tgcc .PHONY:\ttest test: $(CC) $(SRCS) $(TESTS) -o test ./test rm test よし，これで上手に関心事を分離したディレクトリ構成になりましたね！\nおわりに 今回も最後まで読んでいただきありがとうございました。次回はいよいよ Github Actions を使ったテストの自動化について書きたいと思います！ではでは〜。\n参考文献 組込みソフトウェア開発のための構造化プログラミング Learning Test-Driven Development ",
+  "wordCount" : "173",
+  "inLanguage": "en",
+  "datePublished": "2022-12-15T11:51:01+09:00",
+  "dateModified": "2022-12-15T11:51:01+09:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://ntk221.github.io/posts/separate_of_concerns/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "knittaのブログ",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://ntk221.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://ntk221.github.io" accesskey="h" title="knittaのブログ (Alt + H)">knittaのブログ</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title">
+      Separate of concerns
+    </h1>
+    <div class="post-meta"><span title='2022-12-15 11:51:01 +0900 +0900'>December 15, 2022</span>
+
+</div>
+  </header> 
+  <div class="post-content"><h2 id="はじめに">はじめに<a hidden class="anchor" aria-hidden="true" href="#はじめに">#</a></h2>
+<hr>
+<p>前回の記事では，テストファーストのやり方で関数を開発するということをしました。結果として以下のようなコードが出来上がりました。</p>
+<pre tabindex="0"><code>#include &lt;stdbool.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;limits.h&gt;
+
+int my_abs(int x)
+{
+    if (INT_MIN)
+        return (-1);
+	if (x &lt; 0)
+        return (-x);
+    else
+        return (x);
+}
+
+void test(void)
+{
+	bool result = (my_abs(-100) == 100) &amp;&amp; (my_abs(100) == 100);
+
+    bool special = (my_abs(INT_MIN) == -1) &amp;&amp; \
+                        (my_abs(INT_MAX) == INT_MAX) &amp;&amp; \
+                        (my_abs(0) == 0);
+
+	if (result)
+    		puts(&#34;ok&#34;);
+	else
+		puts(&#34;ko&#34;);
+}
+
+int main(void)
+{
+	test();
+}
+</code></pre><p>しかし,前回のコードにはちょっとした問題の芽が潜んでいます。それは，<strong>テストの対象となるコードと，テスト用のコードが同一のファイルに含まれている</strong>という点です。今のやり方でコードを管理していると，テスト対象となるコードが，テスト用のコードを呼び出すといった意図しない呼び出し関係が生じてしまうかもしれません。</p>
+<h2 id="関心ごとの分離">関心ごとの分離<a hidden class="anchor" aria-hidden="true" href="#関心ごとの分離">#</a></h2>
+<hr>
+<p>前回の記事に書いたように，ソフトウェアはそれぞれが固有の働きをする複数のパーツからなると考えることができます。この時非常に重要なのは，<strong>各パーツは一つの仕事を担当するように設計する</strong>，ということです。各パーツの仕事を明確にして管理しなければ，先ほど確認したようなコード間での意図しない結合が起きてしまったり,どのファイルにどの関数が含まれるのかわからなくなってしまうからです。このような設計指針で設計されたソフトウェアのパーツを<strong>単一責務</strong>であると言います。ところで，ソフトウェアのパーツのことは一般に<strong>モジュール</strong>と呼ばれるので，今後は我々もモジュールという言葉を使うことにしましょう。</p>
+<p>テストと開発コードはそれぞれ異なる仕事をする関数です。従って，これらのコードを含むモジュールが単一責務を満たすようにするためには，これらは異なるモジュールに分離する必要があります。このように単一責務を満たすために，モジュールを管理しやすい単位に分割することを関心ごとの分離，と言います。今回は<code>my_abs()</code>と，<code>test()</code>を違うファイルに分割すれば良いことになります。それぞれ，<code>my_abs.c</code>,<code>test.c</code>というファイルを作って分離しましょう。</p>
+<p>./my_abs.c</p>
+<pre tabindex="0"><code>int my_abs(int num)
+{
+    ...
+}
+</code></pre><p>./test.c</p>
+<pre tabindex="0"><code>void test(void)
+{
+    ...
+}
+
+int main(void)
+{
+    test();
+    return (0);
+}
+</code></pre><h2 id="依存性の注入">依存性の注入<a hidden class="anchor" aria-hidden="true" href="#依存性の注入">#</a></h2>
+<hr>
+<p>このままでは，<code>test.c</code>は単独でコンパイルすることができません。なぜなら,<code>test()</code>関数は,<code>my_abs()</code>を呼び出しているという点で<code>my_abs()</code>関数に依存しているからです。このことをファイルの中で表現し，ファイル単独でコンパイルできるようにするには，<code>my_abs()</code>の
+プロトタイプ宣言を含むヘッダーファイルを用意して，それをファイルの先頭でインクルードすれば良いです。以下のようになります。</p>
+<p>./include/my_abs.h</p>
+<pre tabindex="0"><code>#ifndef MY_ABS_H
+#define MY_ABS_H
+
+int my_abs(int num);
+
+#endif
+</code></pre><p>test.c</p>
+<pre tabindex="0"><code>#include &#34;include/abs.h&#34;
+
+...
+</code></pre><p>これで，テストコードの開発コードに対する依存性を表現することができました。</p>
+<h2 id="makefile">Makefile<a hidden class="anchor" aria-hidden="true" href="#makefile">#</a></h2>
+<hr>
+<p>C言語では，Makefileというビルドツールを使うことで，ビルド過程を簡略化することができます。以下のように超簡単なMakefileを用意しましょう。</p>
+<p>./Makefile</p>
+<pre tabindex="0"><code>test:
+    gcc *.c -o test
+    ./test
+    rm test
+</code></pre><p>これで，test用のコマンドを作ることができました。<code>make test</code>とコマンドを打ってみましょう。</p>
+<p><img loading="lazy" src="https://ntk221.github.io/images/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%202022-12-15%2014.14.05.png" alt=""  />
+</p>
+<p>すごくいい感じですね！</p>
+<p>最後に，<code>test.c</code>と,<code>my_abs.c</code>が異なるモジュールに属することを明示するために，フォルダ構成を整えましょう。</p>
+<pre tabindex="0"><code>$&gt; tree
+.
+├── Makefile
+├── include
+│   └── my_abs.h
+├── srcs
+│   └── my_abs.c
+└── tests
+    └── test.c
+</code></pre><p>これに合わせて，Makefileも多少変更しましょう。</p>
+<pre tabindex="0"><code>SRCS	=	./srcs/*.c
+
+TESTS	=	./tests/*.c
+
+CC	=	gcc
+
+.PHONY:	test
+test:
+	$(CC) $(SRCS) $(TESTS) -o test
+	./test
+	rm test
+</code></pre><p>よし，これで上手に関心事を分離したディレクトリ構成になりましたね！</p>
+<h2 id="おわりに">おわりに<a hidden class="anchor" aria-hidden="true" href="#おわりに">#</a></h2>
+<hr>
+<p>今回も最後まで読んでいただきありがとうございました。次回はいよいよ Github Actions を使ったテストの自動化について書きたいと思います！ではでは〜。</p>
+<h2 id="参考文献">参考文献<a hidden class="anchor" aria-hidden="true" href="#参考文献">#</a></h2>
+<ul>
+<li><a href="https://www.shoeisha.co.jp/book/detail/9784798147611">組込みソフトウェア開発のための構造化プログラミング</a></li>
+<li><a href="https://www.oreilly.com/library/view/learning-test-driven-development/9781098106461/">Learning Test-Driven Development</a></li>
+</ul>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2022 <a href="https://ntk221.github.io">knittaのブログ</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

@@ -6,7 +6,19 @@
     <description>Recent content on knittaのブログ</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 06 Dec 2022 06:33:04 +0900</lastBuildDate><atom:link href="https://ntk221.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 15 Dec 2022 11:51:01 +0900</lastBuildDate><atom:link href="https://ntk221.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Separate of concerns</title>
+      <link>https://ntk221.github.io/posts/separate_of_concerns/</link>
+      <pubDate>Thu, 15 Dec 2022 11:51:01 +0900</pubDate>
+      
+      <guid>https://ntk221.github.io/posts/separate_of_concerns/</guid>
+      <description>はじめに 前回の記事では，テストファーストのやり方で関数を開発するということをしました。結果として以下のようなコードが出来上がりました。
+#include &amp;lt;stdbool.h&amp;gt; #include &amp;lt;stdio.h&amp;gt; #include &amp;lt;limits.h&amp;gt; int my_abs(int x) { if (INT_MIN) return (-1); if (x &amp;lt; 0) return (-x); else return (x); } void test(void) { bool result = (my_abs(-100) == 100) &amp;amp;&amp;amp; (my_abs(100) == 100); bool special = (my_abs(INT_MIN) == -1) &amp;amp;&amp;amp; \ (my_abs(INT_MAX) == INT_MAX) &amp;amp;&amp;amp; \ (my_abs(0) == 0); if (result) puts(&amp;#34;ok&amp;#34;); else puts(&amp;#34;ko&amp;#34;); } int main(void) { test(); } しかし,前回のコードにはちょっとした問題の芽が潜んでいます。それは，テストの対象となるコードと，テスト用のコードが同一のファイルに含まれているという点です。今のやり方でコードを管理していると，テスト対象となるコードが，テスト用のコードを呼び出すといった意図しない呼び出し関係が生じてしまうかもしれません。
+関心ごとの分離 前回の記事に書いたように，ソフトウェアはそれぞれが固有の働きをする複数のパーツからなると考えることができます。この時非常に重要なのは，各パーツは一つの仕事を担当するように設計する，ということです。各パーツの仕事を明確にして管理しなければ，先ほど確認したようなコード間での意図しない結合が起きてしまったり,どのファイルにどの関数が含まれるのかわからなくなってしまうからです。このような設計指針で設計されたソフトウェアのパーツを単一責務であると言います。ところで，ソフトウェアのパーツのことは一般にモジュールと呼ばれるので，今後は我々もモジュールという言葉を使うことにしましょう。
+テストと開発コードはそれぞれ異なる仕事をする関数です。従って，これらのコードを含むモジュールが単一責務を満たすようにするためには，これらは異なるモジュールに分離する必要があります。このように単一責務を満たすために，モジュールを管理しやすい単位に分割することを関心ごとの分離，と言います。今回はmy_abs()と，test()を違うファイルに分割すれば良いことになります。それぞれ，my_abs.c,test.cというファイルを作って分離しましょう。</description>
+    </item>
+    
     <item>
       <title>Test first</title>
       <link>https://ntk221.github.io/posts/test_first/</link>
