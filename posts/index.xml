@@ -6,7 +6,34 @@
     <description>Recent content in Posts on knittaのブログ</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 15 Dec 2022 11:51:01 +0900</lastBuildDate><atom:link href="https://ntk221.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 19 Dec 2022 19:23:28 +0900</lastBuildDate><atom:link href="https://ntk221.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Test automation</title>
+      <link>https://ntk221.github.io/posts/test_automation/</link>
+      <pubDate>Mon, 19 Dec 2022 19:23:28 +0900</pubDate>
+      
+      <guid>https://ntk221.github.io/posts/test_automation/</guid>
+      <description>はじめに 前回，前々回とテストについて書いてきました。前回の最後では，Makefileを使ってテスト用のコマンドを作ることができました。
+ところで，このmakeというコマンド，どこかで見覚えがないでしょうか&amp;hellip;
+&amp;hellip;はい，実はこのブログを構築している静的サイトジェネレータのコマンドhugoに似ています。Hugoについては，こちらの記事を読んでいただけると嬉しいです。
+それでですね，上の記事で説明したように，このサイトはGithub Actionsを使うことで，自動的にビルドされています。この仕組みによって，毎回わざわざhugoコマンドを手元で打ってビルドする必要がなくなったのでした。
+では，同じことがC言語プログラムのテストについてもできるのではないでしょうか？
+&amp;hellip;えー，できます！
+準備 Github Actionsをテスト用の環境として使いたいので，まずはこれまで作ってきたディレクトリをGithub に push しましょう。前回までの成果物はこんな感じでした。
+$&amp;gt; tree . ├── Makefile ├── README.md ├── include │ └── my_abs.h ├── src │ └── my_abs.c └── tests └── test.c このディレクトリをGithubにpushします。以下のような感じになりました。
+YAMLファイル Github Actions を使うためには，どういうイベントが起きたら，どういうジョブをするかといったルールを記述するファイルが必要になります。このファイルはYAMLという形式で記述されている必要があります。
+というわけで，YAMLファイルが必要になるのですが，便利なことに，基本的な形が整えられたファイルをGithub上でゲットすることができます。やった〜。
+まずは，Actionsタブをクリックします。
+すると，ページが遷移して，Suggested for this repositoryに，C/C++ with Make という設定が確認できます。
+Configureというタブをクリックします。
+おー！これが欲しかったのよ〜。
+Start commit というタブをクリックして，このYAMLファイルをプロジェクトに追加しましょう。
+そして，ローカルに変更を反映するために，git pullコマンドを打っておきましょう。リポジトリは以下のような構成になりました。
+c-cpp.yml の編集 現在のc-cpp.ymlファイルには，configureというよくわからないフィールドが含まれているので，思い切って今回これは消しちゃうことにします。問題が起きたら，もう一度戻って考えることにしましょう。
+また，makeにも現在のMakefileに記述されていないルールを使っているものがあるので，これらは削除して，代わりにmake testを追加します。jobの名前に関しては，今回走らせたい処理はビルドではなく，テストなので，ここも書き換えることにします。最終的に以下のようなYAMLファイルになりました。
+name: C/C++ CI on: push: branches: [ &amp;#34;main&amp;#34; ] pull_request: branches: [ &amp;#34;main&amp;#34; ] jobs: test: runs-on: ubuntu-latest steps: - uses: actions/checkout@v3 - name: test run: make test では，mainブランチにpushしてみましょう。Githubのページを覗いてみましょう。</description>
+    </item>
+    
     <item>
       <title>Separation of concerns</title>
       <link>https://ntk221.github.io/posts/separation_of_concerns/</link>
