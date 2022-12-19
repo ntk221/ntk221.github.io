@@ -232,10 +232,10 @@ name: C/C&#43;&#43; CI on: push: branches: [ &#34;main&#34; ] pull_request: bran
 <hr>
 <p>前回，前々回とテストについて書いてきました。前回の最後では，Makefileを使ってテスト用のコマンドを作ることができました。</p>
 <p>ところで，この<code>make</code>というコマンド，どこかで見覚えがないでしょうか&hellip;</p>
-<p>&hellip;はい，実はこのブログを構築している静的サイトジェネレータのコマンド<code>hugo</code>に似ています。Hugoについては，こちらの記事を読んでいただけると嬉しいです。</p>
+<p>&hellip;はい，実はこのブログを構築している静的サイトジェネレータのコマンド<code>hugo</code>に似ています。Hugoについては，<a href="https://ntk221.github.io/posts/how_to_build_blog/">こちらの記事</a>を読んでいただけると嬉しいです。</p>
 <p>それでですね，上の記事で説明したように，このサイトはGithub Actionsを使うことで，自動的にビルドされています。この仕組みによって，毎回わざわざ<code>hugo</code>コマンドを手元で打ってビルドする必要がなくなったのでした。</p>
 <p>では，<strong>同じことがC言語プログラムのテストについてもできるのではないでしょうか？</strong></p>
-<p>&hellip;えー，できます！</p>
+<p>&hellip;えー，<strong>できます！</strong></p>
 <h3 id="準備"><strong>準備</strong><a hidden class="anchor" aria-hidden="true" href="#準備">#</a></h3>
 <hr>
 <p>Github Actionsをテスト用の環境として使いたいので，まずはこれまで作ってきたディレクトリをGithub に push しましょう。前回までの成果物はこんな感じでした。</p>
