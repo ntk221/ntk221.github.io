@@ -26,7 +26,7 @@ void test(void)
 {
 	bool result = (my_abs(-100) == 100) && (my_abs(100) == 100);
 
-    bool special = (my_abs(INT_MIN) == -1) && \
+    	bool special = (my_abs(INT_MIN) == -1) && \
                         (my_abs(INT_MAX) == INT_MAX) && \
                         (my_abs(0) == 0);
 
