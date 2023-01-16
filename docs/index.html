@@ -127,6 +127,51 @@
 
 <article class="first-entry"> 
   <header class="entry-header">
+    <h2>Test automation
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>はじめに 前回，前々回とテストについて書いてきました。前回の最後では，Makefileを使ってテスト用のコマンドを作ることができました。
+ところで，このmakeというコマンド，どこかで見覚えがないでしょうか…
+…はい，実はこのブログを構築している静的サイトジェネレータのコマンドhugoに似ています。Hugoについては，こちらの記事を読んでいただけると嬉しいです。
+それでですね，上の記事で説明したように，このサイトはGithub Actionsを使うことで，自動的にビルドされています。この仕組みによって，毎回わざわざhugoコマンドを手元で打ってビルドする必要がなくなったのでした。
+では，同じことがC言語プログラムのテストについてもできるのではないでしょうか？
+…えー，できます！
+準備 Github Actionsをテスト用の環境として使いたいので，まずはこれまで作ってきたディレクトリをGithub に push しましょう。前回までの成果物はこんな感じでした。
+$&gt; tree . ├── Makefile ├── README.md ├── include │ └── my_abs.h ├── src │ └── my_abs.c └── tests └── test.c このディレクトリをGithubにpushします。以下のような感じになりました。
+YAMLファイル Github Actions を使うためには，どういうイベントが起きたら，どういうジョブをするかといったルールを記述するファイルが必要になります。このファイルはYAMLという形式で記述されている必要があります。
+というわけで，YAMLファイルが必要になるのですが，便利なことに，基本的な形が整えられたファイルをGithub上でゲットすることができます。やった〜。
+まずは，Actionsタブをクリックします。
+すると，ページが遷移して，Suggested for this repositoryに，C/C&#43;&#43; with Make という設定が確認できます。
+Configureというタブをクリックします。
+おー！これが欲しかったのよ〜。
+Start commit というタブをクリックして，このYAMLファイルをプロジェクトに追加しましょう。
+そして，ローカルに変更を反映するために，git pullコマンドを打っておきましょう。リポジトリは以下のような構成になりました。
+c-cpp.yml の編集 現在のc-cpp.ymlファイルには，configureというよくわからないフィールドが含まれているので，思い切って今回これは消しちゃうことにします。問題が起きたら，もう一度戻って考えることにしましょう。
+また，makeにも現在のMakefileに記述されていないルールを使っているものがあるので，これらは削除して，代わりにmake testを追加します。jobの名前に関しては，今回走らせたい処理はビルドではなく，テストなので，ここも書き換えることにします。最終的に以下のようなYAMLファイルになりました。
+name: C/C&#43;&#43; CI on: push: branches: [ &#34;main&#34; ] pull_request: branches: [ &#34;main&#34; ] jobs: test: runs-on: ubuntu-latest steps: - uses: actions/checkout@v3 - name: test run: make test では，mainブランチにpushしてみましょう。Githubのページを覗いてみましょう。...</p>
+  </div>
+  <footer class="entry-footer"><span title='2022-12-19 19:23:28 +0900 JST'>December 19, 2022</span></footer>
+  <a class="entry-link" aria-label="post link to Test automation" href="https://ntk221.github.io/posts/test_automation/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>Separation of concerns
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>はじめに 前回の記事では，テストファーストのやり方で関数を開発するということをしました。結果として以下のようなコードが出来上がりました。
+#include &lt;stdbool.h&gt; #include &lt;stdio.h&gt; #include &lt;limits.h&gt; int my_abs(int x) { if (INT_MIN) return (-1); if (x &lt; 0) return (-x); else return (x); } void test(void) { bool result = (my_abs(-100) == 100) &amp;&amp; (my_abs(100) == 100); bool special = (my_abs(INT_MIN) == -1) &amp;&amp; \ (my_abs(INT_MAX) == INT_MAX) &amp;&amp; \ (my_abs(0) == 0); if (result) puts(&#34;ok&#34;); else puts(&#34;ko&#34;); } int main(void) { test(); } しかし,前回のコードにはちょっとした問題の芽が潜んでいます。それは，テストの対象となるコードと，テスト用のコードが同一のファイルに含まれているという点です。今のやり方でコードを管理していると，テスト対象となるコードが，テスト用のコードを呼び出すといった意図しない呼び出し関係が生じてしまうかもしれません。
+関心ごとの分離 前回の記事に書いたように，ソフトウェアはそれぞれが固有の働きをする複数のパーツからなると考えることができます。この時非常に重要なのは，各パーツは一つの仕事を担当するように設計する，ということです。各パーツの仕事を明確にして管理しなければ，先ほど確認したようなコード間での意図しない結合が起きてしまったり,どのファイルにどの関数が含まれるのかわからなくなってしまうからです。このような設計指針で設計されたソフトウェアのパーツを単一責務であると言います。ところで，ソフトウェアのパーツのことは一般にモジュールと呼ばれるので，今後は我々もモジュールという言葉を使うことにしましょう。
+テストと開発コードはそれぞれ異なる仕事をする関数です。従って，これらのコードを含むモジュールが単一責務を満たすようにするためには，これらは異なるモジュールに分離する必要があります。このように単一責務を満たすために，モジュールを管理しやすい単位に分割することを関心ごとの分離，と言います。今回はmy_abs()と，test()を違うファイルに分割すれば良いことになります。それぞれ，my_abs.c,test.cというファイルを作って分離しましょう。...</p>
+  </div>
+  <footer class="entry-footer"><span title='2022-12-15 11:51:01 +0900 JST'>December 15, 2022</span></footer>
+  <a class="entry-link" aria-label="post link to Separation of concerns" href="https://ntk221.github.io/posts/separation_of_concerns/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
     <h2>Test first
     </h2>
   </header>
@@ -147,10 +192,44 @@ okじゃない しかし，absの典型的な場合とは他にもあります�
   <footer class="entry-footer"><span title='2022-12-06 06:33:04 +0900 JST'>December 6, 2022</span></footer>
   <a class="entry-link" aria-label="post link to Test first" href="https://ntk221.github.io/posts/test_first/"></a>
 </article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>How to build your blog
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>こんにちは!42tokyo Advent Calendar 2022の14日目を担当する, knittaです。よろしくお願いします。
+はじめに 突然ですが，皆さんこういうことを思ったことがないでしょうか。
+「あー，なんか有無を言わさずみんなに褒められて，気分良くなりたいなぁ…」
+こんなときは，みんなと同じことをやっていてはいけない，ということで私は42Tokyo というところの入学試験(Piscine)を受けて見事合格しました。それから僕は友達を集めて，「ねぇみんな聞いてー！僕,42Tokyoに合格したよ〜〜〜」と言いました。すると，みんなこう言いました。
+「なにそれ〜」
+この様な結果から次の2点の事実が観察できます。一つは
+「42Tokyo の知名度は低く，その価値は社会から認識されていない」 という点。 もう一つは，
+「みんなと違うことをやったからと言って，それだけで誉められる訳ではない」 という点です。 今回のテーマ 以上の観察から私はこう思いました。
+「42Tokyo の価値をみんなに知ってもらって，かつ，みんなに褒められた〜い」
+そのためには， 42Tokyo がどの様な場所で，私がどの様な人間であるかを知ってもらうための情報を発信する方法が必要になると思います。また，なんかかっこいいやり方でそれを実現するのがよいのではないでしょうか。カッコいいほうが自慢できるし，誉められそうなので😄
+静的サイトジェネレータ &#43; Github Pages = cool 検索エンジンを駆使して情報を集めていった結果，
+静的サイトジェネレータ
+Github Pages
+というものを使えば，カッコいいサイトを作って，Github で公開することができそうだぞ，ということがわかりました。これを使って42Tokyoのことや，私が今やっていることについて，coolに情報を発信することができるのではないかな？
+では，早速やってみましょう！
+…
+とその前に一応これらの用語について用語を整理しておきます。
+静的サイトジェネレータ … Markdown などの記法で書かれたテキストファイルから，静的なWebページを生成するソフトウェアである
+Github Pages … 静的サイトのホスティングサービスであり，これを使って静的サイトジェネレータを使って作った Webサイトを運用することができる。
+実際にやってみる では，実際に静的サイトジェネレータを使って，Webサイトを作ってから，Github Pages にデプロイしてみましょう。今回私が使う静的サイトジェネレータは，Hugoというものです。
+私の環境(M1 Mac)では，Homebrew というパッケージマネージャを使って，Hugo をシステムに導入することができました。
+$&gt; brew install hugo これだけで，Hugo を使って静的サイトを作ることができます。まずは，サイトの雛形を作りましょう。以下のようなコマンドを打って実行するだけでいい。
+$&gt; hugo new site &lt;サイト名&gt; &lt;サイト名&gt;で指定してディレクトリが新しくできるので，このディレクトリに移動して，tree コマンドを打ってみると以下の様な構成になっていることがわかリます。...</p>
+  </div>
+  <footer class="entry-footer"><span title='2022-11-30 02:59:10 +0900 JST'>November 30, 2022</span></footer>
+  <a class="entry-link" aria-label="post link to How to build your blog" href="https://ntk221.github.io/posts/how_to_build_blog/"></a>
+</article>
     </main>
     
 <footer class="footer">
-    <span>&copy; 2022 <a href="https://ntk221.github.io">knittaのブログ</a></span>
+    <span>&copy; 2023 <a href="https://ntk221.github.io">knittaのブログ</a></span>
     <span>
         Powered by
         <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
