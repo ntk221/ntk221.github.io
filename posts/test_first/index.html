@@ -207,11 +207,9 @@ okじゃない しかし，absの典型的な場合とは他にもあります�
 
 </div>
   </header> 
-  <div class="post-content"><h3 id="はじめに"><strong>はじめに</strong><a hidden class="anchor" aria-hidden="true" href="#はじめに">#</a></h3>
-<hr>
+  <div class="post-content"><h1 id="はじめに">はじめに<a hidden class="anchor" aria-hidden="true" href="#はじめに">#</a></h1>
 <p><a href="https://ntk221.github.io/posts/how_to_build_blog/">いろいろあって</a>，かっこいいブログを作ることができたので，早速なんか書いていこうと思います。今回は<strong>テスト</strong>についてです。</p>
-<h3 id="テストファースト"><strong>テストファースト</strong><a hidden class="anchor" aria-hidden="true" href="#テストファースト">#</a></h3>
-<hr>
+<h1 id="テストファースト">テストファースト<a hidden class="anchor" aria-hidden="true" href="#テストファースト">#</a></h1>
 <p>ソフトウェア開発において，プログラマはソフトウェアの部品となるデータ構造や関数を一つづつ作っていくという作業をします。この時，関数やデータ構造にはそれぞれ<strong>期待される役割</strong>を持っています。例えば，<code>int abs(int x)</code>という関数は，絶対値を返すという機能を持っていることを期待されます。このような期待される役割を機能要件と呼ぶこともあります。</p>
 <p>機能要件が定まっていたとしても，それだけでプログラムを書いていくのは難しいことが多いと思います。ソフトウェアの期待される機能を実現するには，それを複数の部品に分割していく必要もあるでしょう。このような作業は<strong>ソフトウェアの設計</strong>に含まれます。</p>
 <p>ソフトウェアの設計が終わって，分割された一つの関数を実装するという段階になってもまだどのように実装すればいいかわからないということがあります
@@ -251,8 +249,7 @@ int main(void)
 <p><img loading="lazy" src="https://ntk221.github.io/images/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%202022-12-06%205.43.20.png" alt=""  />
 </p>
 <p>わーい，okだ！</p>
-<h3 id="okじゃない"><strong>okじゃない</strong><a hidden class="anchor" aria-hidden="true" href="#okじゃない">#</a></h3>
-<hr>
+<h1 id="okじゃない">okじゃない<a hidden class="anchor" aria-hidden="true" href="#okじゃない">#</a></h1>
 <p>しかし，<code>abs</code>の典型的な場合とは他にもあります。入力が正の整数の時には，<code>abs</code>は，その数をそのまま返さなくてはなりません。この振る舞いについてもテストしましょう。</p>
 <pre tabindex="0"><code>#include &lt;stdbool.h&gt;
 #include &lt;stdio.h&gt;
@@ -292,8 +289,7 @@ int main(void)
 <p><img loading="lazy" src="https://ntk221.github.io/images/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%202022-12-06%205.52.17.png" alt=""  />
 </p>
 <p>はい，完璧!</p>
-<h3 id="完璧じゃない"><strong>完璧じゃない</strong><a hidden class="anchor" aria-hidden="true" href="#完璧じゃない">#</a></h3>
-<hr>
+<h1 id="完璧じゃない">完璧じゃない<a hidden class="anchor" aria-hidden="true" href="#完璧じゃない">#</a></h1>
 <p>典型的な振る舞いはこれでできたように思いますが，これでは完璧とまでは言えません。ここで完璧な関数とは，<strong>全ての場合について期待される振る舞いをする</strong>ような関数です。</p>
 <p>ここで，テストするべき入力値は，<strong>典型的ではない値</strong>です。典型的でない値の典型(?)としては，<code>0</code>値や，最大値，最小値があります。<code>int</code>型の最小値のテストを追加しましょう。</p>
 <pre tabindex="0"><code>void test(void)
@@ -350,8 +346,7 @@ bool special = (my_abs(INT_MIN) == -1) &amp;&amp; \
 <p><img loading="lazy" src="https://ntk221.github.io/images/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%202022-12-06%206.25.18.png" alt=""  />
 </p>
 <p>完璧やん!</p>
-<h3 id="おわりに"><strong>おわりに</strong><a hidden class="anchor" aria-hidden="true" href="#おわりに">#</a></h3>
-<hr>
+<h1 id="おわりに">おわりに<a hidden class="anchor" aria-hidden="true" href="#おわりに">#</a></h1>
 <p>はい，ということでテストファーストで関数を作っていくやり方を紹介しました。これからこのやり方を拡張していくことに関するブログ記事も書きたいと思います。また，ソフトウェアの設計に関することも勉強して，ブログ記事としてアウトプットしていきたいなと思います。最後まで読んでいただきありがとうございました！</p>
 <h3 id="参考文献"><strong>参考文献</strong><a hidden class="anchor" aria-hidden="true" href="#参考文献">#</a></h3>
 <ul>
@@ -369,7 +364,7 @@ bool special = (my_abs(INT_MIN) == -1) &amp;&amp; \
     </main>
     
 <footer class="footer">
-    <span>&copy; 2022 <a href="https://ntk221.github.io">knittaのブログ</a></span>
+    <span>&copy; 2023 <a href="https://ntk221.github.io">knittaのブログ</a></span>
     <span>
         Powered by
         <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
