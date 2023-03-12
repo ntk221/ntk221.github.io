@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Modularity and Dependency | knittaのブログ</title>
+<meta name="keywords" content="">
+<meta name="description" content="はじめに こんにちはー。今日は，モジュラー性と，依存性という概念について紹介します。
+以前，こちらの記事で，ソフトウェアを構成するパーツのことをモジュールと呼ぶ，と言いました。ソフトウェアは，それぞれの仕事を行う複数のモジュールを適切に組み合わせることによって全体の機能を実現しているということです。
+モジュラー性は，「システムのコンポーネントが分割，再結合されている度合いであり，柔軟性の高さ，用途の多さといった利点がある」と定義されます。
+複数のモジュールから一つのソフトウェアを組み上げられた，モジュラー性の高いソフトウェアをつくるという設計指針にはいくつかのメリットがあるのですが，そのうちの一つのメリットはテストがしやすいという点にあります。&hellip;またテストかい，という感じでしょうかね。まぁ，そう言わずに&hellip;
+しかし，モジュラーなソフトウェアに関するテストにおいては解決しなくてはならない問題点があります。それは依存性です。
+依存性 ソフトウェアを複数のモジュールから構築しようとした時，モジュール同士には依存関係が生じます。
+例えば，インタープリターというソフトウェアについて考えてみます。こちらの資料から引用しますと，インタープリターとは以下のようなモジュール群から構成されるソフトウェアです。
+字句解析(lexical analysis): 文字列を言語の要素（トークン、token）の列に分解する。 構文解析(syntax analysis): token列を意味を反映した構造に変換。この構造は、しばしば、木構造で表現されるので、抽象構文木（abstract syntax tree）と呼ばれる。ここまでの言語を認識する部分を言語のparserと呼ぶ。 意味解析(semantics analysis): 構文木の意味を解析する。インタプリターでは、ここで意味を解析し、それに対応した動作を行う。 これを図に表すと以下のようになります。 ここで注目していただきたいのは，構文解析器が入力として受け取るトークン列は，字句解析器の出力になっているという点です。したがって,構文解析器は字句解析器なしでは仕事をすることができません。このことを，構文解析器は字句解析器に依存していると言います。
+ソフトウェアの設計図においては，モジュール間の依存関係を矢印を用いて表現します。上に説明したことを図として表現すると以下のようになります。
+単体テスト さて，ソフトウェアのテストにはさまざまな種類がありますが，モジュラーなソフトウェアにとって最も重要なテストは単体テストであると言えます。
+単体テストとは，以下の3つの性質を満たすテストとして定義されます。
+単体(unit)と呼ばれる少量のコードを検証する 実行時間が短い 隔離された状態で実行される 3つ目の条件は抽象的に表現すると，モジュラー性が確保された状態でテストすることと表現できるのではないでしょうか。実はこの「隔離」の解釈で単体テストの２つの学派(古典学はとロンドン学派)が分かれるようです。まぁ，それはとりあえず置いといて&hellip;
+事例 42Tokyoの課題で，push_swapというものがあります。この課題ではスタックというデータ構造を使って，整数のソートを行うソフトウェアをつくります。この課題で私は以下のようなディレクトリ構造でコードを管理していました。以下に示すのは単純化されたものです。
+push_swap
+./include/色々なヘッダファイル ./stack/スタックというデータ構造を定義するファイル群 ./sort/スタックをソートするための関数群 その他色々なファイルたち... さて，すでに説明したように，push_swapとはスタックをソートするという課題でした。これはつまり，ソート用の関数群はスタックというデータ構造に依存している，ということができます。
+依存関係がある場合，sortフォルダの中にあるファイルのみでテストするということができません。なぜなら，ソート用の関数群は，スタックに依存しており，スタックを用意するためのソースコードを必要とするからです。よって，ソート用の関数群はそれだけで完全に隔離された状態ではテストできません。ソート用の関数群をテストするには何らかの仕方で，スタックに対して依存関係を持たせる必要があります。
+ここで，以前の記事と同様に，依存性の注入という考え方を使うことができます。前回はテストコードとソースコードの間でヘッダーファイルのインクルードで依存関係を持たせるということをしましたが，今回はフォルダのレベルで同じことを実現したいと思います。できるかな？うーん，まぁ，できるでしょう！
+次回に続きます&hellip;
+参照資料 単体テストの考え方/使い方
+組み込みソフトウェア開発のための構造化プログラミング
+継続的デリバリーのソフトウェア工学
+筑波大学の言語処理系授業の講義資料">
+<meta name="author" content="">
+<link rel="canonical" href="https://ntk221.github.io/posts/modularity_and_dependency/">
+<link crossorigin="anonymous" href="https://ntk221.github.io/assets/css/stylesheet.bc1149f4a72aa4858d3a9f71462f75e5884ffe8073ea9d6d5761d5663d651e20.css" integrity="sha256-vBFJ9KcqpIWNOp9xRi915YhP/oBz6p1tV2HVZj1lHiA=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="https://ntk221.github.io/assets/js/highlight.f413e19d0714851f6474e7ee9632408e58ac146fbdbe62747134bea2fa3415e0.js" integrity="sha256-9BPhnQcUhR9kdOfuljJAjlisFG&#43;9vmJ0cTS&#43;ovo0FeA="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://ntk221.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://ntk221.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://ntk221.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://ntk221.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://ntk221.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Modularity and Dependency" />
+<meta property="og:description" content="はじめに こんにちはー。今日は，モジュラー性と，依存性という概念について紹介します。
+以前，こちらの記事で，ソフトウェアを構成するパーツのことをモジュールと呼ぶ，と言いました。ソフトウェアは，それぞれの仕事を行う複数のモジュールを適切に組み合わせることによって全体の機能を実現しているということです。
+モジュラー性は，「システムのコンポーネントが分割，再結合されている度合いであり，柔軟性の高さ，用途の多さといった利点がある」と定義されます。
+複数のモジュールから一つのソフトウェアを組み上げられた，モジュラー性の高いソフトウェアをつくるという設計指針にはいくつかのメリットがあるのですが，そのうちの一つのメリットはテストがしやすいという点にあります。&hellip;またテストかい，という感じでしょうかね。まぁ，そう言わずに&hellip;
+しかし，モジュラーなソフトウェアに関するテストにおいては解決しなくてはならない問題点があります。それは依存性です。
+依存性 ソフトウェアを複数のモジュールから構築しようとした時，モジュール同士には依存関係が生じます。
+例えば，インタープリターというソフトウェアについて考えてみます。こちらの資料から引用しますと，インタープリターとは以下のようなモジュール群から構成されるソフトウェアです。
+字句解析(lexical analysis): 文字列を言語の要素（トークン、token）の列に分解する。 構文解析(syntax analysis): token列を意味を反映した構造に変換。この構造は、しばしば、木構造で表現されるので、抽象構文木（abstract syntax tree）と呼ばれる。ここまでの言語を認識する部分を言語のparserと呼ぶ。 意味解析(semantics analysis): 構文木の意味を解析する。インタプリターでは、ここで意味を解析し、それに対応した動作を行う。 これを図に表すと以下のようになります。 ここで注目していただきたいのは，構文解析器が入力として受け取るトークン列は，字句解析器の出力になっているという点です。したがって,構文解析器は字句解析器なしでは仕事をすることができません。このことを，構文解析器は字句解析器に依存していると言います。
+ソフトウェアの設計図においては，モジュール間の依存関係を矢印を用いて表現します。上に説明したことを図として表現すると以下のようになります。
+単体テスト さて，ソフトウェアのテストにはさまざまな種類がありますが，モジュラーなソフトウェアにとって最も重要なテストは単体テストであると言えます。
+単体テストとは，以下の3つの性質を満たすテストとして定義されます。
+単体(unit)と呼ばれる少量のコードを検証する 実行時間が短い 隔離された状態で実行される 3つ目の条件は抽象的に表現すると，モジュラー性が確保された状態でテストすることと表現できるのではないでしょうか。実はこの「隔離」の解釈で単体テストの２つの学派(古典学はとロンドン学派)が分かれるようです。まぁ，それはとりあえず置いといて&hellip;
+事例 42Tokyoの課題で，push_swapというものがあります。この課題ではスタックというデータ構造を使って，整数のソートを行うソフトウェアをつくります。この課題で私は以下のようなディレクトリ構造でコードを管理していました。以下に示すのは単純化されたものです。
+push_swap
+./include/色々なヘッダファイル ./stack/スタックというデータ構造を定義するファイル群 ./sort/スタックをソートするための関数群 その他色々なファイルたち... さて，すでに説明したように，push_swapとはスタックをソートするという課題でした。これはつまり，ソート用の関数群はスタックというデータ構造に依存している，ということができます。
+依存関係がある場合，sortフォルダの中にあるファイルのみでテストするということができません。なぜなら，ソート用の関数群は，スタックに依存しており，スタックを用意するためのソースコードを必要とするからです。よって，ソート用の関数群はそれだけで完全に隔離された状態ではテストできません。ソート用の関数群をテストするには何らかの仕方で，スタックに対して依存関係を持たせる必要があります。
+ここで，以前の記事と同様に，依存性の注入という考え方を使うことができます。前回はテストコードとソースコードの間でヘッダーファイルのインクルードで依存関係を持たせるということをしましたが，今回はフォルダのレベルで同じことを実現したいと思います。できるかな？うーん，まぁ，できるでしょう！
+次回に続きます&hellip;
+参照資料 単体テストの考え方/使い方
+組み込みソフトウェア開発のための構造化プログラミング
+継続的デリバリーのソフトウェア工学
+筑波大学の言語処理系授業の講義資料" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ntk221.github.io/posts/modularity_and_dependency/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-01-15T23:05:43+09:00" />
+<meta property="article:modified_time" content="2023-01-15T23:05:43+09:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Modularity and Dependency"/>
+<meta name="twitter:description" content="はじめに こんにちはー。今日は，モジュラー性と，依存性という概念について紹介します。
+以前，こちらの記事で，ソフトウェアを構成するパーツのことをモジュールと呼ぶ，と言いました。ソフトウェアは，それぞれの仕事を行う複数のモジュールを適切に組み合わせることによって全体の機能を実現しているということです。
+モジュラー性は，「システムのコンポーネントが分割，再結合されている度合いであり，柔軟性の高さ，用途の多さといった利点がある」と定義されます。
+複数のモジュールから一つのソフトウェアを組み上げられた，モジュラー性の高いソフトウェアをつくるという設計指針にはいくつかのメリットがあるのですが，そのうちの一つのメリットはテストがしやすいという点にあります。&hellip;またテストかい，という感じでしょうかね。まぁ，そう言わずに&hellip;
+しかし，モジュラーなソフトウェアに関するテストにおいては解決しなくてはならない問題点があります。それは依存性です。
+依存性 ソフトウェアを複数のモジュールから構築しようとした時，モジュール同士には依存関係が生じます。
+例えば，インタープリターというソフトウェアについて考えてみます。こちらの資料から引用しますと，インタープリターとは以下のようなモジュール群から構成されるソフトウェアです。
+字句解析(lexical analysis): 文字列を言語の要素（トークン、token）の列に分解する。 構文解析(syntax analysis): token列を意味を反映した構造に変換。この構造は、しばしば、木構造で表現されるので、抽象構文木（abstract syntax tree）と呼ばれる。ここまでの言語を認識する部分を言語のparserと呼ぶ。 意味解析(semantics analysis): 構文木の意味を解析する。インタプリターでは、ここで意味を解析し、それに対応した動作を行う。 これを図に表すと以下のようになります。 ここで注目していただきたいのは，構文解析器が入力として受け取るトークン列は，字句解析器の出力になっているという点です。したがって,構文解析器は字句解析器なしでは仕事をすることができません。このことを，構文解析器は字句解析器に依存していると言います。
+ソフトウェアの設計図においては，モジュール間の依存関係を矢印を用いて表現します。上に説明したことを図として表現すると以下のようになります。
+単体テスト さて，ソフトウェアのテストにはさまざまな種類がありますが，モジュラーなソフトウェアにとって最も重要なテストは単体テストであると言えます。
+単体テストとは，以下の3つの性質を満たすテストとして定義されます。
+単体(unit)と呼ばれる少量のコードを検証する 実行時間が短い 隔離された状態で実行される 3つ目の条件は抽象的に表現すると，モジュラー性が確保された状態でテストすることと表現できるのではないでしょうか。実はこの「隔離」の解釈で単体テストの２つの学派(古典学はとロンドン学派)が分かれるようです。まぁ，それはとりあえず置いといて&hellip;
+事例 42Tokyoの課題で，push_swapというものがあります。この課題ではスタックというデータ構造を使って，整数のソートを行うソフトウェアをつくります。この課題で私は以下のようなディレクトリ構造でコードを管理していました。以下に示すのは単純化されたものです。
+push_swap
+./include/色々なヘッダファイル ./stack/スタックというデータ構造を定義するファイル群 ./sort/スタックをソートするための関数群 その他色々なファイルたち... さて，すでに説明したように，push_swapとはスタックをソートするという課題でした。これはつまり，ソート用の関数群はスタックというデータ構造に依存している，ということができます。
+依存関係がある場合，sortフォルダの中にあるファイルのみでテストするということができません。なぜなら，ソート用の関数群は，スタックに依存しており，スタックを用意するためのソースコードを必要とするからです。よって，ソート用の関数群はそれだけで完全に隔離された状態ではテストできません。ソート用の関数群をテストするには何らかの仕方で，スタックに対して依存関係を持たせる必要があります。
+ここで，以前の記事と同様に，依存性の注入という考え方を使うことができます。前回はテストコードとソースコードの間でヘッダーファイルのインクルードで依存関係を持たせるということをしましたが，今回はフォルダのレベルで同じことを実現したいと思います。できるかな？うーん，まぁ，できるでしょう！
+次回に続きます&hellip;
+参照資料 単体テストの考え方/使い方
+組み込みソフトウェア開発のための構造化プログラミング
+継続的デリバリーのソフトウェア工学
+筑波大学の言語処理系授業の講義資料"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Posts",
+      "item": "https://ntk221.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "Modularity and Dependency",
+      "item": "https://ntk221.github.io/posts/modularity_and_dependency/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Modularity and Dependency",
+  "name": "Modularity and Dependency",
+  "description": "はじめに こんにちはー。今日は，モジュラー性と，依存性という概念について紹介します。\n以前，こちらの記事で，ソフトウェアを構成するパーツのことをモジュールと呼ぶ，と言いました。ソフトウェアは，それぞれの仕事を行う複数のモジュールを適切に組み合わせることによって全体の機能を実現しているということです。\nモジュラー性は，「システムのコンポーネントが分割，再結合されている度合いであり，柔軟性の高さ，用途の多さといった利点がある」と定義されます。\n複数のモジュールから一つのソフトウェアを組み上げられた，モジュラー性の高いソフトウェアをつくるという設計指針にはいくつかのメリットがあるのですが，そのうちの一つのメリットはテストがしやすいという点にあります。\u0026hellip;またテストかい，という感じでしょうかね。まぁ，そう言わずに\u0026hellip;\nしかし，モジュラーなソフトウェアに関するテストにおいては解決しなくてはならない問題点があります。それは依存性です。\n依存性 ソフトウェアを複数のモジュールから構築しようとした時，モジュール同士には依存関係が生じます。\n例えば，インタープリターというソフトウェアについて考えてみます。こちらの資料から引用しますと，インタープリターとは以下のようなモジュール群から構成されるソフトウェアです。\n字句解析(lexical analysis): 文字列を言語の要素（トークン、token）の列に分解する。 構文解析(syntax analysis): token列を意味を反映した構造に変換。この構造は、しばしば、木構造で表現されるので、抽象構文木（abstract syntax tree）と呼ばれる。ここまでの言語を認識する部分を言語のparserと呼ぶ。 意味解析(semantics analysis): 構文木の意味を解析する。インタプリターでは、ここで意味を解析し、それに対応した動作を行う。 これを図に表すと以下のようになります。 ここで注目していただきたいのは，構文解析器が入力として受け取るトークン列は，字句解析器の出力になっているという点です。したがって,構文解析器は字句解析器なしでは仕事をすることができません。このことを，構文解析器は字句解析器に依存していると言います。\nソフトウェアの設計図においては，モジュール間の依存関係を矢印を用いて表現します。上に説明したことを図として表現すると以下のようになります。\n単体テスト さて，ソフトウェアのテストにはさまざまな種類がありますが，モジュラーなソフトウェアにとって最も重要なテストは単体テストであると言えます。\n単体テストとは，以下の3つの性質を満たすテストとして定義されます。\n単体(unit)と呼ばれる少量のコードを検証する 実行時間が短い 隔離された状態で実行される 3つ目の条件は抽象的に表現すると，モジュラー性が確保された状態でテストすることと表現できるのではないでしょうか。実はこの「隔離」の解釈で単体テストの２つの学派(古典学はとロンドン学派)が分かれるようです。まぁ，それはとりあえず置いといて\u0026hellip;\n事例 42Tokyoの課題で，push_swapというものがあります。この課題ではスタックというデータ構造を使って，整数のソートを行うソフトウェアをつくります。この課題で私は以下のようなディレクトリ構造でコードを管理していました。以下に示すのは単純化されたものです。\npush_swap\n./include/色々なヘッダファイル ./stack/スタックというデータ構造を定義するファイル群 ./sort/スタックをソートするための関数群 その他色々なファイルたち... さて，すでに説明したように，push_swapとはスタックをソートするという課題でした。これはつまり，ソート用の関数群はスタックというデータ構造に依存している，ということができます。\n依存関係がある場合，sortフォルダの中にあるファイルのみでテストするということができません。なぜなら，ソート用の関数群は，スタックに依存しており，スタックを用意するためのソースコードを必要とするからです。よって，ソート用の関数群はそれだけで完全に隔離された状態ではテストできません。ソート用の関数群をテストするには何らかの仕方で，スタックに対して依存関係を持たせる必要があります。\nここで，以前の記事と同様に，依存性の注入という考え方を使うことができます。前回はテストコードとソースコードの間でヘッダーファイルのインクルードで依存関係を持たせるということをしましたが，今回はフォルダのレベルで同じことを実現したいと思います。できるかな？うーん，まぁ，できるでしょう！\n次回に続きます\u0026hellip;\n参照資料 単体テストの考え方/使い方\n組み込みソフトウェア開発のための構造化プログラミング\n継続的デリバリーのソフトウェア工学\n筑波大学の言語処理系授業の講義資料",
+  "keywords": [
+    
+  ],
+  "articleBody": "はじめに こんにちはー。今日は，モジュラー性と，依存性という概念について紹介します。\n以前，こちらの記事で，ソフトウェアを構成するパーツのことをモジュールと呼ぶ，と言いました。ソフトウェアは，それぞれの仕事を行う複数のモジュールを適切に組み合わせることによって全体の機能を実現しているということです。\nモジュラー性は，「システムのコンポーネントが分割，再結合されている度合いであり，柔軟性の高さ，用途の多さといった利点がある」と定義されます。\n複数のモジュールから一つのソフトウェアを組み上げられた，モジュラー性の高いソフトウェアをつくるという設計指針にはいくつかのメリットがあるのですが，そのうちの一つのメリットはテストがしやすいという点にあります。…またテストかい，という感じでしょうかね。まぁ，そう言わずに…\nしかし，モジュラーなソフトウェアに関するテストにおいては解決しなくてはならない問題点があります。それは依存性です。\n依存性 ソフトウェアを複数のモジュールから構築しようとした時，モジュール同士には依存関係が生じます。\n例えば，インタープリターというソフトウェアについて考えてみます。こちらの資料から引用しますと，インタープリターとは以下のようなモジュール群から構成されるソフトウェアです。\n字句解析(lexical analysis): 文字列を言語の要素（トークン、token）の列に分解する。 構文解析(syntax analysis): token列を意味を反映した構造に変換。この構造は、しばしば、木構造で表現されるので、抽象構文木（abstract syntax tree）と呼ばれる。ここまでの言語を認識する部分を言語のparserと呼ぶ。 意味解析(semantics analysis): 構文木の意味を解析する。インタプリターでは、ここで意味を解析し、それに対応した動作を行う。 これを図に表すと以下のようになります。 ここで注目していただきたいのは，構文解析器が入力として受け取るトークン列は，字句解析器の出力になっているという点です。したがって,構文解析器は字句解析器なしでは仕事をすることができません。このことを，構文解析器は字句解析器に依存していると言います。\nソフトウェアの設計図においては，モジュール間の依存関係を矢印を用いて表現します。上に説明したことを図として表現すると以下のようになります。\n単体テスト さて，ソフトウェアのテストにはさまざまな種類がありますが，モジュラーなソフトウェアにとって最も重要なテストは単体テストであると言えます。\n単体テストとは，以下の3つの性質を満たすテストとして定義されます。\n単体(unit)と呼ばれる少量のコードを検証する 実行時間が短い 隔離された状態で実行される 3つ目の条件は抽象的に表現すると，モジュラー性が確保された状態でテストすることと表現できるのではないでしょうか。実はこの「隔離」の解釈で単体テストの２つの学派(古典学はとロンドン学派)が分かれるようです。まぁ，それはとりあえず置いといて…\n事例 42Tokyoの課題で，push_swapというものがあります。この課題ではスタックというデータ構造を使って，整数のソートを行うソフトウェアをつくります。この課題で私は以下のようなディレクトリ構造でコードを管理していました。以下に示すのは単純化されたものです。\npush_swap\n./include/色々なヘッダファイル ./stack/スタックというデータ構造を定義するファイル群 ./sort/スタックをソートするための関数群 その他色々なファイルたち... さて，すでに説明したように，push_swapとはスタックをソートするという課題でした。これはつまり，ソート用の関数群はスタックというデータ構造に依存している，ということができます。\n依存関係がある場合，sortフォルダの中にあるファイルのみでテストするということができません。なぜなら，ソート用の関数群は，スタックに依存しており，スタックを用意するためのソースコードを必要とするからです。よって，ソート用の関数群はそれだけで完全に隔離された状態ではテストできません。ソート用の関数群をテストするには何らかの仕方で，スタックに対して依存関係を持たせる必要があります。\nここで，以前の記事と同様に，依存性の注入という考え方を使うことができます。前回はテストコードとソースコードの間でヘッダーファイルのインクルードで依存関係を持たせるということをしましたが，今回はフォルダのレベルで同じことを実現したいと思います。できるかな？うーん，まぁ，できるでしょう！\n次回に続きます…\n参照資料 単体テストの考え方/使い方\n組み込みソフトウェア開発のための構造化プログラミング\n継続的デリバリーのソフトウェア工学\n筑波大学の言語処理系授業の講義資料\n",
+  "wordCount" : "46",
+  "inLanguage": "en",
+  "datePublished": "2023-01-15T23:05:43+09:00",
+  "dateModified": "2023-01-15T23:05:43+09:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://ntk221.github.io/posts/modularity_and_dependency/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "knittaのブログ",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://ntk221.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://ntk221.github.io" accesskey="h" title="knittaのブログ (Alt + H)">knittaのブログ</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title">
+      Modularity and Dependency
+    </h1>
+    <div class="post-meta"><span title='2023-01-15 23:05:43 +0900 JST'>January 15, 2023</span>
+
+</div>
+  </header> 
+  <div class="post-content"><h1 id="はじめに">はじめに<a hidden class="anchor" aria-hidden="true" href="#はじめに">#</a></h1>
+<p>こんにちはー。今日は，<strong>モジュラー性</strong>と，<strong>依存性</strong>という概念について紹介します。</p>
+<p>以前，<a href="https://ntk221.github.io/posts/separation_of_concerns/">こちらの記事</a>で，ソフトウェアを構成するパーツのことをモジュールと呼ぶ，と言いました。ソフトウェアは，それぞれの仕事を行う複数のモジュールを適切に組み合わせることによって全体の機能を実現しているということです。</p>
+<p>モジュラー性は，「システムのコンポーネントが分割，再結合されている度合いであり，柔軟性の高さ，用途の多さといった利点がある」と定義されます。</p>
+<p>複数のモジュールから一つのソフトウェアを組み上げられた，モジュラー性の高いソフトウェアをつくるという設計指針にはいくつかのメリットがあるのですが，そのうちの一つのメリットはテストがしやすいという点にあります。&hellip;またテストかい，という感じでしょうかね。まぁ，そう言わずに&hellip;</p>
+<p>しかし，モジュラーなソフトウェアに関するテストにおいては解決しなくてはならない問題点があります。それは依存性です。</p>
+<h1 id="依存性">依存性<a hidden class="anchor" aria-hidden="true" href="#依存性">#</a></h1>
+<p>ソフトウェアを複数のモジュールから構築しようとした時，モジュール同士には<strong>依存関係</strong>が生じます。</p>
+<p>例えば，インタープリターというソフトウェアについて考えてみます。<a href="http://www.hpcs.cs.tsukuba.ac.jp/~msato/lecture-note/comp-lecture/note1.html">こちらの資料</a>から引用しますと，インタープリターとは以下のようなモジュール群から構成されるソフトウェアです。</p>
+<ol>
+<li>字句解析(lexical analysis): 文字列を言語の要素（トークン、token）の列に分解する。</li>
+<li>構文解析(syntax analysis): token列を意味を反映した構造に変換。この構造は、しばしば、木構造で表現されるので、抽象構文木（abstract syntax tree）と呼ばれる。ここまでの言語を認識する部分を言語のparserと呼ぶ。</li>
+<li>意味解析(semantics analysis): 構文木の意味を解析する。インタプリターでは、ここで意味を解析し、それに対応した動作を行う。</li>
+</ol>
+<p>これを図に表すと以下のようになります。
+<img loading="lazy" src="https://ntk221.github.io/images/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%202023-01-16%2015.02.00.png" alt=""  />
+</p>
+<p>ここで注目していただきたいのは，構文解析器が入力として受け取るトークン列は，字句解析器の出力になっているという点です。したがって,構文解析器は字句解析器なしでは仕事をすることができません。このことを，構文解析器は字句解析器に依存していると言います。</p>
+<p>ソフトウェアの設計図においては，モジュール間の依存関係を矢印を用いて表現します。上に説明したことを図として表現すると以下のようになります。</p>
+<p><img loading="lazy" src="https://ntk221.github.io/images/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%202023-01-16%2015.02.44.png" alt=""  />
+</p>
+<h1 id="単体テスト">単体テスト<a hidden class="anchor" aria-hidden="true" href="#単体テスト">#</a></h1>
+<p>さて，ソフトウェアのテストにはさまざまな種類がありますが，モジュラーなソフトウェアにとって最も重要なテストは<strong>単体テスト</strong>であると言えます。</p>
+<p>単体テストとは，以下の3つの性質を満たすテストとして定義されます。</p>
+<ul>
+<li>単体(unit)と呼ばれる少量のコードを検証する</li>
+<li>実行時間が短い</li>
+<li>隔離された状態で実行される</li>
+</ul>
+<p>3つ目の条件は抽象的に表現すると，モジュラー性が確保された状態でテストすることと表現できるのではないでしょうか。実はこの「隔離」の解釈で単体テストの２つの学派(古典学はとロンドン学派)が分かれるようです。まぁ，それはとりあえず置いといて&hellip;</p>
+<h1 id="事例">事例<a hidden class="anchor" aria-hidden="true" href="#事例">#</a></h1>
+<p>42Tokyoの課題で，push_swapというものがあります。この課題ではスタックというデータ構造を使って，整数のソートを行うソフトウェアをつくります。この課題で私は以下のようなディレクトリ構造でコードを管理していました。以下に示すのは単純化されたものです。</p>
+<p>push_swap</p>
+<pre tabindex="0"><code>
+./include/色々なヘッダファイル
+./stack/スタックというデータ構造を定義するファイル群
+./sort/スタックをソートするための関数群
+
+その他色々なファイルたち...
+</code></pre><p>さて，すでに説明したように，push_swapとはスタックをソートするという課題でした。これはつまり，<strong>ソート用の関数群はスタックというデータ構造に依存している</strong>，ということができます。</p>
+<p>依存関係がある場合，<code>sort</code>フォルダの中にあるファイルのみでテストするということができません。なぜなら，ソート用の関数群は，スタックに依存しており，スタックを用意するためのソースコードを必要とするからです。よって，ソート用の関数群はそれだけで完全に隔離された状態ではテストできません。ソート用の関数群をテストするには何らかの仕方で，スタックに対して依存関係を持たせる必要があります。</p>
+<p>ここで，<a href="https://ntk221.github.io/posts/separation_of_concerns/">以前の記事</a>と同様に，依存性の注入という考え方を使うことができます。前回はテストコードとソースコードの間でヘッダーファイルのインクルードで依存関係を持たせるということをしましたが，今回はフォルダのレベルで同じことを実現したいと思います。できるかな？うーん，まぁ，できるでしょう！</p>
+<p>次回に続きます&hellip;</p>
+<h3 id="参照資料"><strong>参照資料</strong><a hidden class="anchor" aria-hidden="true" href="#参照資料">#</a></h3>
+<ul>
+<li>
+<p><a href="https://book.mynavi.jp/ec/products/detail/id=134252">単体テストの考え方/使い方</a></p>
+</li>
+<li>
+<p><a href="https://www.shoeisha.co.jp/book/detail/9784798147611">組み込みソフトウェア開発のための構造化プログラミング</a></p>
+</li>
+<li>
+<p><a href="https://bookplus.nikkei.com/atcl/catalog/22/12/01/00531/">継続的デリバリーのソフトウェア工学</a></p>
+</li>
+<li>
+<p><a href="http://www.hpcs.cs.tsukuba.ac.jp/~msato/lecture-note/comp-lecture/note1.html">筑波大学の言語処理系授業の講義資料</a></p>
+</li>
+</ul>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="https://ntk221.github.io">knittaのブログ</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

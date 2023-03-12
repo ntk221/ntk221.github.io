@@ -1,6 +1,7 @@
 ---
 title: "Modularity and Dependency"
 date: 2023-01-15T23:05:43+09:00
+draft: true
 ---
 
 # はじめに

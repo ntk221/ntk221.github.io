@@ -183,8 +183,7 @@
 
 </div>
   </header> 
-  <div class="post-content"><h3 id="はじめに"><strong>はじめに</strong><a hidden class="anchor" aria-hidden="true" href="#はじめに">#</a></h3>
-<hr>
+  <div class="post-content"><h1 id="はじめに">はじめに<a hidden class="anchor" aria-hidden="true" href="#はじめに">#</a></h1>
 <p><a href="https://ntk221.github.io/posts/how_to_build_blog/">前回の記事</a>では，テストファーストのやり方で関数を開発するということをしました。結果として以下のようなコードが出来上がりました。</p>
 <pre tabindex="0"><code>#include &lt;stdbool.h&gt;
 #include &lt;stdio.h&gt;
@@ -219,8 +218,7 @@ int main(void)
 	test();
 }
 </code></pre><p>しかし,前回のコードにはちょっとした問題の芽が潜んでいます。それは，<strong>テストの対象となるコードと，テスト用のコードが同一のファイルに含まれている</strong>という点です。今のやり方でコードを管理していると，テスト対象となるコードが，テスト用のコードを呼び出すといった意図しない呼び出し関係が生じてしまうかもしれません。</p>
-<h3 id="関心ごとの分離"><strong>関心ごとの分離</strong><a hidden class="anchor" aria-hidden="true" href="#関心ごとの分離">#</a></h3>
-<hr>
+<h1 id="関心ごとの分離">関心ごとの分離<a hidden class="anchor" aria-hidden="true" href="#関心ごとの分離">#</a></h1>
 <p>前回の記事に書いたように，ソフトウェアはそれぞれが固有の働きをする複数のパーツからなると考えることができます。この時非常に重要なのは，<strong>各パーツは一つの仕事を担当するように設計する</strong>，ということです。各パーツの仕事を明確にして管理しなければ，先ほど確認したようなコード間での意図しない結合が起きてしまったり,どのファイルにどの関数が含まれるのかわからなくなってしまうからです。このような設計指針で設計されたソフトウェアのパーツを<strong>単一責務</strong>であると言います。ところで，ソフトウェアのパーツのことは一般に<strong>モジュール</strong>と呼ばれるので，今後は我々もモジュールという言葉を使うことにしましょう。</p>
 <p>テストと開発コードはそれぞれ異なる仕事をする関数です。従って，これらのコードを含むモジュールが単一責務を満たすようにするためには，これらは異なるモジュールに分離する必要があります。このように単一責務を満たすために，モジュールを管理しやすい単位に分割することを関心ごとの分離，と言います。今回は<code>my_abs()</code>と，<code>test()</code>を違うファイルに分割すれば良いことになります。それぞれ，<code>my_abs.c</code>,<code>test.c</code>というファイルを作って分離しましょう。</p>
 <p>./my_abs.c</p>
@@ -239,8 +237,7 @@ int main(void)
     test();
     return (0);
 }
-</code></pre><h3 id="依存性の注入"><strong>依存性の注入</strong><a hidden class="anchor" aria-hidden="true" href="#依存性の注入">#</a></h3>
-<hr>
+</code></pre><h1 id="依存性の注入">依存性の注入<a hidden class="anchor" aria-hidden="true" href="#依存性の注入">#</a></h1>
 <p>このままでは，<code>test.c</code>は単独でコンパイルすることができません。なぜなら,<code>test()</code>関数は,<code>my_abs()</code>を呼び出しているという点で<code>my_abs()</code>関数に依存しているからです。このことをファイルの中で表現し，ファイル単独でコンパイルできるようにするには，<code>my_abs()</code>の
 プロトタイプ宣言を含むヘッダーファイルを用意して，それをファイルの先頭でインクルードすれば良いです。以下のようになります。</p>
 <p>./include/my_abs.h</p>
@@ -255,8 +252,7 @@ int my_abs(int num);
 
 ...
 </code></pre><p>これで，テストコードの開発コードに対する依存性を表現することができました。</p>
-<h3 id="makefile"><strong>Makefile</strong><a hidden class="anchor" aria-hidden="true" href="#makefile">#</a></h3>
-<hr>
+<h1 id="makefile">Makefile<a hidden class="anchor" aria-hidden="true" href="#makefile">#</a></h1>
 <p>C言語では，Makefileというビルドツールを使うことで，ビルド過程を簡略化することができます。以下のように超簡単なMakefileを用意しましょう。</p>
 <p>./Makefile</p>
 <pre tabindex="0"><code>test:
@@ -290,10 +286,9 @@ test:
 	./test
 	rm test
 </code></pre><p>よし，これで上手に関心事を分離したディレクトリ構成になりましたね！</p>
-<h3 id="おわりに"><strong>おわりに</strong><a hidden class="anchor" aria-hidden="true" href="#おわりに">#</a></h3>
-<hr>
+<h1 id="おわりに">おわりに<a hidden class="anchor" aria-hidden="true" href="#おわりに">#</a></h1>
 <p>今回も最後まで読んでいただきありがとうございました。次回はいよいよ Github Actions を使ったテストの自動化について書きたいと思います！ではでは〜。</p>
-<h2 id="参考文献">参考文献<a hidden class="anchor" aria-hidden="true" href="#参考文献">#</a></h2>
+<h3 id="参考文献"><strong>参考文献</strong><a hidden class="anchor" aria-hidden="true" href="#参考文献">#</a></h3>
 <ul>
 <li><a href="https://www.shoeisha.co.jp/book/detail/9784798147611">組込みソフトウェア開発のための構造化プログラミング</a></li>
 <li><a href="https://www.oreilly.com/library/view/learning-test-driven-development/9781098106461/">Learning Test-Driven Development</a></li>

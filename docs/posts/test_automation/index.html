@@ -228,16 +228,14 @@ name: C/C&#43;&#43; CI on: push: branches: [ &#34;main&#34; ] pull_request: bran
 
 </div>
   </header> 
-  <div class="post-content"><h3 id="はじめに"><strong>はじめに</strong><a hidden class="anchor" aria-hidden="true" href="#はじめに">#</a></h3>
-<hr>
+  <div class="post-content"><h1 id="はじめに">はじめに<a hidden class="anchor" aria-hidden="true" href="#はじめに">#</a></h1>
 <p>前回，前々回とテストについて書いてきました。前回の最後では，Makefileを使ってテスト用のコマンドを作ることができました。</p>
 <p>ところで，この<code>make</code>というコマンド，どこかで見覚えがないでしょうか&hellip;</p>
 <p>&hellip;はい，実はこのブログを構築している静的サイトジェネレータのコマンド<code>hugo</code>に似ています。Hugoについては，<a href="https://ntk221.github.io/posts/how_to_build_blog/">こちらの記事</a>を読んでいただけると嬉しいです。</p>
 <p>それでですね，上の記事で説明したように，このサイトはGithub Actionsを使うことで，自動的にビルドされています。この仕組みによって，毎回わざわざ<code>hugo</code>コマンドを手元で打ってビルドする必要がなくなったのでした。</p>
 <p>では，<strong>同じことがC言語プログラムのテストについてもできるのではないでしょうか？</strong></p>
 <p>&hellip;えー，<strong>できます！</strong></p>
-<h3 id="準備"><strong>準備</strong><a hidden class="anchor" aria-hidden="true" href="#準備">#</a></h3>
-<hr>
+<h1 id="準備">準備<a hidden class="anchor" aria-hidden="true" href="#準備">#</a></h1>
 <p>Github Actionsをテスト用の環境として使いたいので，まずはこれまで作ってきたディレクトリをGithub に push しましょう。前回までの成果物はこんな感じでした。</p>
 <pre tabindex="0"><code>$&gt; tree
 .
@@ -252,8 +250,7 @@ name: C/C&#43;&#43; CI on: push: branches: [ &#34;main&#34; ] pull_request: bran
 </code></pre><p>このディレクトリをGithubにpushします。以下のような感じになりました。</p>
 <p><img loading="lazy" src="https://ntk221.github.io/images/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%202022-12-19%2019.55.41.png" alt=""  />
 </p>
-<h3 id="yamlファイル"><strong>YAMLファイル</strong><a hidden class="anchor" aria-hidden="true" href="#yamlファイル">#</a></h3>
-<hr>
+<h1 id="yamlファイル">YAMLファイル<a hidden class="anchor" aria-hidden="true" href="#yamlファイル">#</a></h1>
 <p>Github Actions を使うためには，どういうイベントが起きたら，どういうジョブをするかといったルールを記述するファイルが必要になります。このファイルは<strong>YAML</strong>という形式で記述されている必要があります。</p>
 <p>というわけで，YAMLファイルが必要になるのですが，便利なことに，基本的な形が整えられたファイルをGithub上でゲットすることができます。やった〜。</p>
 <p>まずは，Actionsタブをクリックします。</p>
@@ -270,8 +267,7 @@ name: C/C&#43;&#43; CI on: push: branches: [ &#34;main&#34; ] pull_request: bran
 <p>そして，ローカルに変更を反映するために，<code>git pull</code>コマンドを打っておきましょう。リポジトリは以下のような構成になりました。</p>
 <p><img loading="lazy" src="https://ntk221.github.io/images/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%202022-12-19%2020.17.20.png" alt=""  />
 </p>
-<h3 id="c-cppyml-の編集"><strong><code>c-cpp.yml</code> の編集</strong><a hidden class="anchor" aria-hidden="true" href="#c-cppyml-の編集">#</a></h3>
-<hr>
+<h1 id="c-cppyml-の編集"><code>c-cpp.yml</code> の編集<a hidden class="anchor" aria-hidden="true" href="#c-cppyml-の編集">#</a></h1>
 <p>現在の<code>c-cpp.yml</code>ファイルには，<code>configure</code>というよくわからないフィールドが含まれているので，思い切って今回これは消しちゃうことにします。問題が起きたら，もう一度戻って考えることにしましょう。</p>
 <p>また，<code>make</code>にも現在のMakefileに記述されていないルールを使っているものがあるので，これらは削除して，代わりに<code>make test</code>を追加します。jobの名前に関しては，今回走らせたい処理はビルドではなく，テストなので，ここも書き換えることにします。最終的に以下のようなYAMLファイルになりました。</p>
 <pre tabindex="0"><code>name: C/C++ CI
@@ -302,8 +298,7 @@ jobs:
 <p><img loading="lazy" src="https://ntk221.github.io/images/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%202022-12-19%2020.36.35.png" alt=""  />
 </p>
 <p>すごい！ちゃんと，テストが実行されたログが残っています！テストが自動で走る仕組みができました！</p>
-<h3 id="おわりに"><strong>おわりに</strong><a hidden class="anchor" aria-hidden="true" href="#おわりに">#</a></h3>
-<hr>
+<h1 id="おわりに">おわりに<a hidden class="anchor" aria-hidden="true" href="#おわりに">#</a></h1>
 <p>ということで，Github Actionsを使ったテストの自動化についての記事でした。<a href="https://zenn.dev/solareenlo/articles/leak_test-6946d15b44d232">solareenloさんのこちらの記事</a>を読むと，valgrind を使ったメモリリークのチェックなども，Github Actionsで自動化することができるようです！</p>
 <p>今回の記事では，自動テストのメリットについては触れることができませんでした。私の今の考えでは，自動テストが真価を発揮するのは複数人で開発する時なのではないかと考えています。ここで，継続的インテグレーション/デプロイメントという概念が登場することになります。ここらへんについても勉強して，近いうちに記事にできたらいいなと思います！今回も最後まで読んでいただきありがとうございました！</p>
 <p>今回作ったリポジトリは，<a href="https://github.com/ntk221/test_automation">こちら</a>です。</p>
